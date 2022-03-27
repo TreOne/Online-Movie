@@ -1,0 +1,61 @@
+@startuml
+actor Клиент as client
+actor "Контент менеджер" as content_manager
+actor Администратор as admin
+
+package "Front-end" as frontend {
+    node "Admin Panel: Front" {
+        component nginx as admin_nginx
+        component Django as admin_engine
+
+        admin_nginx --> admin_engine
+    }
+
+}
+package "Back-end" as backend {
+    node "Auth API" as auth_api {
+        component nginx as auth_nginx
+        component Flask as auth_engine
+        database Postgres as auth_db
+        database Redis as auth_cache
+
+        auth_nginx --> auth_engine
+        auth_engine --> auth_db
+        auth_engine --> auth_cache
+    }
+
+    node "Async API" as async_api {
+        component nginx as async_nginx
+        component FastAPI as async_engine
+        database ElasticSearch as async_db
+        database Redis as async_cache
+
+        async_nginx --> async_engine
+        async_engine --> async_cache
+        async_engine --> async_db
+    }
+
+    node "Admin Panel: Back" as admin_panel_back {
+        database Postgres as admin_db
+
+        admin_engine --> admin_db
+    }
+
+    node "ETL: Movie Transfer" {
+        component "ETL service" as etl_movie_transfer
+    }
+}
+
+
+frontend -[hidden]d-> backend
+
+client ..> auth_nginx
+client --> async_nginx
+admin --> auth_nginx
+content_manager --> admin_nginx
+
+etl_movie_transfer -u-> admin_db : Extract from
+etl_movie_transfer -d-> async_db : Load to
+
+skinparam componentStyle uml2
+@enduml

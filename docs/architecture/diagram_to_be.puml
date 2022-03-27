@@ -1,0 +1,76 @@
+@startuml
+actor Администратор as admin
+actor Аналитик as analyst
+actor "Контент менеджер" as content_manager
+actor Клиент as client
+
+package "Front-end" as frontend {
+    node "Admin Panel: Front" {
+        component nginx as admin_nginx
+        component Django as admin_engine
+
+        admin_nginx --> admin_engine
+    }
+
+}
+package "Back-end" as backend {
+    node "Auth API" as auth_api {
+        component nginx as auth_nginx
+        component Flask as auth_engine
+        database Postgres as auth_db
+        database Redis as auth_cache
+
+        auth_nginx --> auth_engine
+        auth_engine --> auth_db
+        auth_engine --> auth_cache
+    }
+
+    node "Async API" as async_api {
+        component nginx as async_nginx
+        component FastAPI as async_engine
+        database ElasticSearch as async_db
+        database Redis as async_cache
+
+        async_nginx --> async_engine
+        async_engine --> async_cache
+        async_engine --> async_db
+    }
+
+    node "UGC" as ugc_service {
+        component nginx as ugc_nginx
+        component FastAPI as ugc_engine
+        component "ETL: UGC" as etl_ugc_transfer
+        database "Apache Kafka (OLTP)" as ugc_oltp_db
+        database "ClickHouse (OLAP)" as ugc_olap_db
+
+        etl_ugc_transfer -u-> ugc_oltp_db : Extract from
+        etl_ugc_transfer -d-> ugc_olap_db : Load to
+        ugc_nginx --> ugc_engine
+        ugc_engine --> ugc_oltp_db
+    }
+
+    node "Admin Panel: Back" as admin_panel_back {
+        database Postgres as admin_db
+
+        admin_engine --> admin_db
+    }
+
+    node "ETL: Movie Transfer" {
+        component "ETL service" as etl_movie_transfer
+        etl_movie_transfer -u-> admin_db : Extract from
+        etl_movie_transfer -d-> async_db : Load to
+    }
+}
+
+
+frontend -[hidden]d-> backend
+
+admin --> auth_nginx
+analyst --> ugc_olap_db
+content_manager --> admin_nginx
+client ..> auth_nginx
+client ..> ugc_nginx
+client --> async_nginx
+
+skinparam componentStyle uml2
+@enduml
