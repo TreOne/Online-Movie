@@ -1,0 +1,124 @@
+version: '3'
+
+services:
+  nginx:
+    build: deploy/nginx
+    volumes:
+      - static_volume:/home/app/admin_panel/static
+      - media_volume:/home/app/admin_panel/media
+    ports:
+      - "80:80"
+    depends_on:
+      - admin_panel
+      - kibana
+      - api
+    networks:
+      - movie_network
+
+  admin_panel:
+    build:
+      context: .
+      dockerfile: deploy/admin_panel/dev.Dockerfile
+    volumes:
+      - static_volume:/home/app/admin_panel/static
+      - media_volume:/home/app/admin_panel/media
+    env_file:
+      - deploy/admin_panel/example.env
+    depends_on:
+      - db
+    expose:
+      - 8000
+    networks:
+      - movie_network
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./deploy/db/sql_scripts/:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+    env_file:
+      - deploy/db/example.env
+    expose:
+      - 5432
+    networks:
+      - movie_network
+
+  elastic:
+    image: elasticsearch:7.7.0
+    environment:
+      - cluster.name=movies-elasticsearch-cluster
+      - network.host=0.0.0.0
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    expose:
+      - 9200
+    networks:
+      - movie_network
+
+  kibana:
+    image: kibana:7.7.0
+    environment:
+      ELASTICSEARCH_URL: http://elastic:9200
+      ELASTICSEARCH_HOSTS: '["http://elastic:9200"]'
+      SERVER_BASEPATH: /kibana
+    depends_on:
+      - elastic
+    expose:
+      - 5601
+    networks:
+      - movie_network
+
+  ps_to_es:
+    build:
+      context: .
+      dockerfile: deploy/ps_to_es/Dockerfile
+    env_file:
+      - deploy/ps_to_es/example.env
+    depends_on:
+      - db
+      - elastic
+    networks:
+      - movie_network
+
+  redis:
+    image: redis:6.2.6-alpine
+    expose:
+      - 6379
+    networks:
+      - movie_network
+
+  api:
+    build:
+      context: .
+      dockerfile: deploy/api/Dockerfile
+    environment:
+      - PROJECT_NAME=movies
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ELASTIC_HOST=http://elastic
+      - ELASTIC_PORT=9200
+    depends_on:
+      - redis
+      - elastic
+    expose:
+      - 8000
+    networks:
+      - movie_network
+
+volumes:
+  postgres_data:
+  elasticsearch_data:
+  static_volume:
+  media_volume:
+
+networks:
+  movie_network:
+    driver: bridge

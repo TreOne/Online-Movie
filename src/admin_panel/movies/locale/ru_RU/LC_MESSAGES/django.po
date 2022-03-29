@@ -1,0 +1,122 @@
+# ПЕРЕВОД ПРОЕКТА "MOVIES ADMIN".
+# TreOne <tre@tre.one>, 2021.
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-28 23:30+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\apps.py:8
+msgid "movies"
+msgstr "Кинопроизведения"
+
+#: .\models.py:14 .\models.py:189 .\models.py:235
+msgid "Created"
+msgstr "Создано"
+
+#: .\models.py:15
+msgid "Updated"
+msgstr "Обновлено"
+
+#: .\models.py:33 .\models.py:106
+msgid "Title"
+msgstr "Название"
+
+#: .\models.py:38 .\models.py:111
+msgid "Description"
+msgstr "Описание"
+
+#: .\models.py:44
+msgid "Genre"
+msgstr "Жанр"
+
+#: .\models.py:45
+msgid "Genres"
+msgstr "Жанры"
+
+#: .\models.py:65
+msgid "Full name"
+msgstr "Имя"
+
+#: .\models.py:70
+msgid "Birth date"
+msgstr "Дата рождения"
+
+#: .\models.py:76
+msgid "Person"
+msgstr "Персона"
+
+#: .\models.py:77
+msgid "Persons"
+msgstr "Персоны"
+
+#: .\models.py:90
+msgid "Movie"
+msgstr "Фильм"
+
+#: .\models.py:91
+msgid "TV Show"
+msgstr "Шоу"
+
+#: .\models.py:116
+msgid "Creation date"
+msgstr "Релиз"
+
+#: .\models.py:121
+msgid "Certificate"
+msgstr "Сертификат"
+
+#: .\models.py:126
+msgid "File"
+msgstr "Файл"
+
+#: .\models.py:132
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: .\models.py:140
+msgid "Type"
+msgstr "Тип"
+
+#: .\models.py:160
+msgid "FilmWork"
+msgstr "Кинопроизведение"
+
+#: .\models.py:161
+msgid "FilmWorks"
+msgstr "Кинопроизведения"
+
+#: .\models.py:194
+msgid "FilmWorkGenre"
+msgstr "Связь Кинопроизведения и Жанра"
+
+#: .\models.py:195
+msgid "FilmWorksGenres"
+msgstr "Связи Кинопроизведений и Жанров"
+
+#: .\models.py:205
+msgid "Actor"
+msgstr "Актер"
+
+#: .\models.py:206
+msgid "Director"
+msgstr "Режиссер"
+
+#: .\models.py:207
+msgid "Writer"
+msgstr "Сценарист"
+
+#: .\models.py:229
+msgid "Role"
+msgstr "Роль"
+
+#: .\models.py:240
+msgid "FilmWorkPerson"
+msgstr "Связь Кинопроизведения и Персоны"
+
+#: .\models.py:241
+msgid "FilmWorksPersons"
+msgstr "Связи Кинопроизведений и Персон"
