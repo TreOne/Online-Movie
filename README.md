@@ -9,7 +9,9 @@ docker-compose -f docker-compose.dev.yml up -d --build
 Затем применит необходимые миграции, создаст супер пользователя и зальет демо данные для проекта из файла фикстур.
 Через некоторое время ETL-контейнер `ps_to_es` начнет перекачку данных из `db` в `elastic`.
 Проверить данные лучше всего на ендпоинте `http://localhost/api/v1/films/search/?query=Captain`,
-так как его ответы не кешируются.
+так как его ответы не кешируются. 
+
+☟ смотри секцию "Что потыкать?" ☟
 
 ## Запуск проекта (PRODUCTION)
 ### Конфигурация
@@ -19,6 +21,7 @@ cp deploy/admin_panel/example.env deploy/admin_panel/.env
 cp deploy/db/example.env deploy/db/.env
 cp deploy/ps_to_es/example.env deploy/ps_to_es/.env
 cp deploy/api/example.env deploy/api/.env
+cp deploy/auth/example.env deploy/auth/.env
 ```
 ### Установка
 ```shell
