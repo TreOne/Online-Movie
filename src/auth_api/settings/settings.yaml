@@ -10,11 +10,11 @@ flask:
   requests_from_ip_per_minute: 20
 
 alchemy:
-  database_uri: postgresql://user:password@db/auth_database
+  database_uri: postgresql://user:password@authdb/auth_database
   track_modifications: False
 
 redis:
-  host: redis
+  host: authredis
   port: 6379
 
 jaeger:
