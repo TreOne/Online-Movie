@@ -3,7 +3,7 @@
 
 ## Запуск проекта (DEVELOPMENT)
 ```shell
-docker-compose -f docker-compose.dev.yml up -d --build
+docker-compose -f docker-compose.dev.yml up --detach --build
 ```
 После запуска контейнер `admin_panel` дождется полной инициализации контейнера `db` с базой данных.
 Затем применит необходимые миграции, создаст супер пользователя и зальет демо данные для проекта из файла фикстур.

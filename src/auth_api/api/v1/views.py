@@ -405,21 +405,6 @@ def user_roles(user_uuid, role_uuid):
     return {'roles': schema.dump(user.roles)}
 
 
-@blueprint.before_app_first_request
-def register_views():
-    apispec.spec.path(view=UserResource, app=current_app)
-    apispec.spec.path(view=UserList, app=current_app)
-    apispec.spec.path(view=RoleResource, app=current_app)
-    apispec.spec.path(view=RoleList, app=current_app)
-    apispec.spec.path(view=get_self_history, app=current_app)
-    apispec.spec.path(view=get_self_roles, app=current_app)
-    apispec.spec.path(view=get_user_history, app=current_app)
-    apispec.spec.path(view=get_user_roles, app=current_app)
-    apispec.spec.path(view=get_totp_link, app=current_app)
-    apispec.spec.path(view=change_totp_status, app=current_app)
-    apispec.spec.path(view=user_roles, app=current_app)
-
-
 @blueprint.errorhandler(ValidationError)
 def handle_marshmallow_error(e):
     """Возвращает json-ошибку при ошибках валидации marshmallow.
@@ -438,3 +423,12 @@ def register_views():
     apispec.spec.path(view=MeResource, app=current_app)
     apispec.spec.path(view=UserResource, app=current_app)
     apispec.spec.path(view=UserList, app=current_app)
+    apispec.spec.path(view=RoleResource, app=current_app)
+    apispec.spec.path(view=RoleList, app=current_app)
+    apispec.spec.path(view=get_self_history, app=current_app)
+    apispec.spec.path(view=get_self_roles, app=current_app)
+    apispec.spec.path(view=get_user_history, app=current_app)
+    apispec.spec.path(view=get_user_roles, app=current_app)
+    apispec.spec.path(view=get_totp_link, app=current_app)
+    apispec.spec.path(view=change_totp_status, app=current_app)
+    apispec.spec.path(view=user_roles, app=current_app)
