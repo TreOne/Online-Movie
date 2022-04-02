@@ -55,5 +55,4 @@ RUN chown -R app:app $APP_HOME
 USER app
 
 # Запускаем скрипт
-#CMD [ "python", "/home/app/src/main.py" ]
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
+CMD [ "python", "/home/app/src/main.py" ]
