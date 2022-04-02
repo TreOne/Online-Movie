@@ -12,6 +12,7 @@ services:
       - admin_panel
       - api
       - auth
+      - ugc_service
     networks:
       - movie_network
 
@@ -30,6 +31,7 @@ services:
       - 8000
     networks:
       - movie_network
+
   db:
     image: postgres:14.1-alpine3.15
     volumes:
@@ -140,6 +142,49 @@ services:
     networks:
       - movie_network
 
+  ugc_service:
+    build:
+      context: .
+      dockerfile: deploy/ugc_service/Dockerfile
+    env_file:
+      - deploy/ugc_service/example.env
+    volumes:
+      - ./src/ugc_service:/home/app/src
+    depends_on:
+      - kafka
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    networks:
+      - movie_network
+
+  kafka:
+    image: bitnami/kafka:2.8.0
+    expose:
+      - 9092
+    environment:
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+    depends_on:
+      - zookeeper
+    volumes:
+      - kafka_data:/bitnami/kafka
+    networks:
+      - movie_network
+
+  zookeeper:
+    image: bitnami/zookeeper:3.7.0
+    expose:
+      - 2181
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
+    networks:
+      - movie_network
+
   ### Опциональные сервисы
   kibana:
     image: kibana:7.7.0
@@ -165,11 +210,23 @@ services:
     networks:
       - movie_network
 
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:9092"
+    depends_on:
+      - kafka
+    networks:
+      - movie_network
 
 volumes:
   postgres_data:
   auth_postgres_data:
   elasticsearch_data:
+  zookeeper_data:
+  kafka_data:
   static_volume:
   media_volume:
 
