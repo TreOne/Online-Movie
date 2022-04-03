@@ -8,5 +8,5 @@ class OLTPEngine(ABC):
 
     @abstractmethod
     async def send(self, topic: str, message: bytes) -> None:
-        """Посылает сообщение в OTLP систему."""
+        """Посылает сообщение в OLTP систему."""
         pass

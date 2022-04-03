@@ -12,6 +12,7 @@ services:
       - admin_panel
       - api
       - auth
+      - ugc_service
     networks:
       - movie_network
 

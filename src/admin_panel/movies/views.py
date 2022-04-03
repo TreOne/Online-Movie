@@ -9,7 +9,11 @@ def index(request):
                 <li><a href="/django_api/v1/movies/01ab9e34-4ceb-4337-bb69-68a1b0de46b2">Проверка Django REST.</a></li>
                 <li><a href="/admin">Панель администратора (логин: admin, пароль: password)</a></li>
                 <li><a href="/kibana">Kibana.</a></li>
-                <li><a href="/api/openapi">FastAPI.</a></li>
+                <li><a href="/api/openapi">Api service.</a></li>
+                <li><a href="/auth/swagger">Auth service.</a></li>
+                <li><a href="/ugc_service/openapi">UGC service.</a></li>
+                <li><a href="http://localhost:9000/">Kafdrop.</a></li>
+                <li><a href="http://localhost:16686/">Jaeger.</a></li>
             </ul>
         </body>
     """
