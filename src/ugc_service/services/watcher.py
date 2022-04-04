@@ -1,6 +1,7 @@
 from functools import lru_cache
 from uuid import UUID
 
+import orjson
 from aiokafka import AIOKafkaProducer
 from db.kafka import get_kafka_producer
 from engines.oltp.general import OLTPEngine
@@ -16,8 +17,14 @@ class WatcherService:
         self, movie_id: UUID, client_id: UUID, view_ts: int
     ) -> None:
         """Регистрирует сообщение о прогрессе просмотра фильма."""
-        message = f"movie_id={movie_id}|client_id={client_id}|view_ts={view_ts}"
-        await self.oltp_engine.send(topic="movie_watches", message=message.encode())
+        message = {
+            'movie_id': str(movie_id),
+            'client_id': str(client_id),
+            'view_ts': view_ts,
+        }
+        await self.oltp_engine.send(
+            topic='movie_watches', message=orjson.dumps(message)
+        )
 
 
 @lru_cache()
