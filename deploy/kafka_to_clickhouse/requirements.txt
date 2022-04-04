@@ -1,0 +1,6 @@
+pydantic~=1.9.0
+backoff~=1.11.1
+pyaml-env
+orjson~=3.6.6
+confluent-kafka==1.8.2
+clickhouse-driver==0.2.3

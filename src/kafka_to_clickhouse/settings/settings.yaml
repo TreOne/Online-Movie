@@ -1,0 +1,9 @@
+
+clickhouse:
+  host: clickhouse
+  port: 8123
+
+kafka:
+  topic: movie_watches
+  host: kafka
+  port: 9092

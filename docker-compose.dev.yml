@@ -185,6 +185,33 @@ services:
     networks:
       - movie_network
 
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    expose:
+      - 8123
+    ports:
+      - "8123:8123"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse/
+    networks:
+      - movie_network
+
+  kf_to_ch:
+    build:
+      context: .
+      dockerfile: deploy/kafka_to_clickhouse/Dockerfile
+    volumes:
+      - ./src/kafka_to_clickhouse:/home/app/etl
+    depends_on:
+      - clickhouse
+      - kafka
+    networks:
+      - movie_network
+
   ### Опциональные сервисы
   kibana:
     image: kibana:7.7.0
@@ -227,6 +254,7 @@ volumes:
   elasticsearch_data:
   zookeeper_data:
   kafka_data:
+  clickhouse_data:
   static_volume:
   media_volume:
 
