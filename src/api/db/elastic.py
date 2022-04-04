@@ -31,6 +31,7 @@ async def elastic_connect():
     global es
     logger.info('Check connection to elasticsearch server.')
     es = AsyncElasticsearch(hosts=[f'{config.ELASTIC_HOST}:{config.ELASTIC_PORT}'])
+    await elastic_ping()
     logger.info('Successfully connected to elasticsearch server.')
 
 
