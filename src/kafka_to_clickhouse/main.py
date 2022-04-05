@@ -1,27 +1,40 @@
+from typing import Type
+
 from clickhouse_driver import Client
 from confluent_kafka import Consumer
 
-from data_structures.movie_watch import MovieWatch
 from engines.click_house import get_client
 from engines.kafka import get_consumer
+from etl_tasks.abc_data_structure import TransferClass
+from settings.settings import Settings
 
 
 def main():
-    kafka: Consumer = get_consumer()
-    clickhouse: Client = get_client()
+    settings = Settings()
+    clickhouse: Client = get_client(settings.clickhouse)
+    kafka: Consumer = get_consumer(settings.kafka)
 
-    messages = kafka.consume(num_messages=100_000, timeout=5.0)
-    watches = []
-    for message in messages:
-        if not message:
-            break
-        watch = MovieWatch.create_from_message(message)
-        watches.append(watch)
+    for task in settings.tasks:
+        print(f'Starting the task "{task.task_name}"')
+        kafka.subscribe(topics=task.kafka.topics)
 
-    if watches:
-        print(f'Messages received: {len(watches)}')
-        data = [watch.to_clickhouse() for watch in watches]
-        clickhouse.execute("""INSERT INTO movie_watches (MovieID, UserID, ViewDate, ViewTimestamp) VALUES""", data)
+        messages = kafka.consume(num_messages=task.num_messages, timeout=task.kafka.timeout)
+        data_class: Type[TransferClass] = task.data_class
+        watches = []
+        for message in messages:
+            if not message:
+                break
+            watch = data_class.create_from_message(message)
+            watches.append(watch)
+        del messages
+
+        if watches:
+            print(f'Messages received: {len(watches)}')
+            data = [watch.get_tuple() for watch in watches]
+            query = data_class.get_insert_query()
+            clickhouse.execute(query, data)
+
+        kafka.unsubscribe()
 
     kafka.close()
     clickhouse.disconnect()

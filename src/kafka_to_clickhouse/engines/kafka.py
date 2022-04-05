@@ -1,11 +1,12 @@
 from confluent_kafka import Consumer
 
+from settings.settings import KafkaSettings
 
-def get_consumer():
+
+def get_consumer(settings: KafkaSettings) -> Consumer:
     consumer = Consumer({
-        'bootstrap.servers': 'kafka:9092',
-        'group.id': 'movie_watches',
-        'auto.offset.reset': 'earliest',
+        'bootstrap.servers': settings.bootstrap_servers,
+        'group.id': settings.group_id,
+        'auto.offset.reset': settings.auto_offset_reset,
     })
-    consumer.subscribe(topics=['movie_watches'])
     return consumer

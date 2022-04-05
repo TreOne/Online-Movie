@@ -5,9 +5,11 @@ from dataclasses import astuple, dataclass
 from confluent_kafka import Message
 from orjson import orjson
 
+from etl_tasks.abc_data_structure import TransferClass
+
 
 @dataclass(frozen=True)
-class MovieWatch:
+class MovieWatch(TransferClass):
     __slots__ = ('movie_id', 'client_id', 'view_date', 'view_ts')
     movie_id: uuid.UUID
     client_id: uuid.UUID
@@ -26,5 +28,9 @@ class MovieWatch:
             view_ts=record.get('view_ts', 0),
         )
 
-    def to_clickhouse(self):
+    @staticmethod
+    def get_insert_query() -> str:
+        return """INSERT INTO movie_watches (MovieID, UserID, ViewDate, ViewTimestamp) VALUES"""
+
+    def get_tuple(self) -> tuple:
         return astuple(self)
