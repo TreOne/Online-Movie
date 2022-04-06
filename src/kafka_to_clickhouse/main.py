@@ -7,7 +7,9 @@ from confluent_kafka import Consumer
 from engines.click_house import create_table, get_client, table_is_exist
 from engines.kafka import get_consumer
 from etl_tasks.abc_data_structure import TransferClass
-from settings.settings import Settings
+from settings import get_logger, Settings
+
+logger = get_logger('main')
 
 
 def main():
@@ -16,7 +18,7 @@ def main():
     kafka: Consumer = get_consumer(settings.kafka)
 
     for task in settings.tasks:
-        print(f'Starting the task "{task.task_name}"')
+        logger.info(f'Starting the task "{task.task_name}"')
         if not table_is_exist(clickhouse, task.clickhouse.table):
             create_table(clickhouse, task.clickhouse.table_ddl.read_text('utf-8'))
         kafka.subscribe(topics=task.kafka.topics)
@@ -32,16 +34,17 @@ def main():
         del messages
 
         if watches:
-            print(f'Messages received: {len(watches)}')
+            logger.info(f'Messages received: {len(watches)}')
             data = [watch.get_tuple() for watch in watches]
             query = data_class.get_insert_query()
             try:
                 result = clickhouse.execute(query, data)
+                logger.info(f'Successfully added {len(data)} new messages in ClickHouse')
             except ServerException as e:
                 # TODO: КХ ответил ошибкой. Что делаем? Пробуем еще раз или откатываем сдвиг полученных сообщений?
-                print(f'ClickHouse Error: {e}')
+                logger.error(f'Ошибка с ClickHouse: {e}')
         else:
-            print('No new messages.')
+            logger.info('No new messages in Kafka.')
 
         kafka.unsubscribe()
 
