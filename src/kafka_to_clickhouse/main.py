@@ -9,8 +9,13 @@ from engines.kafka import get_consumer
 from etl_tasks.abc_data_structure import TransferClass
 from settings.settings import Settings
 
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-def main():
+my_scheduler = BlockingScheduler()
+
+
+@my_scheduler.scheduled_job('interval', hours=1)
+def etl_process():
     settings = Settings()
     clickhouse: Client = get_client(settings.clickhouse)
     kafka: Consumer = get_consumer(settings.kafka)
@@ -50,4 +55,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    my_scheduler.start()

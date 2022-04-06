@@ -1,5 +1,4 @@
 from confluent_kafka import Consumer
-
 from settings.settings import KafkaSettings
 
 
