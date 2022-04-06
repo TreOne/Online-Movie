@@ -1,9 +1,10 @@
 from typing import Type
 
 from clickhouse_driver import Client
+from clickhouse_driver.errors import ServerException
 from confluent_kafka import Consumer
 
-from engines.click_house import get_client
+from engines.click_house import create_table, get_client, table_is_exist
 from engines.kafka import get_consumer
 from etl_tasks.abc_data_structure import TransferClass
 from settings.settings import Settings
@@ -16,6 +17,8 @@ def main():
 
     for task in settings.tasks:
         print(f'Starting the task "{task.task_name}"')
+        if not table_is_exist(clickhouse, task.clickhouse.table):
+            create_table(clickhouse, task.clickhouse.table_ddl.read_text('utf-8'))
         kafka.subscribe(topics=task.kafka.topics)
 
         messages = kafka.consume(num_messages=task.num_messages, timeout=task.kafka.timeout)
@@ -32,7 +35,13 @@ def main():
             print(f'Messages received: {len(watches)}')
             data = [watch.get_tuple() for watch in watches]
             query = data_class.get_insert_query()
-            clickhouse.execute(query, data)
+            try:
+                result = clickhouse.execute(query, data)
+            except ServerException as e:
+                # TODO: КХ ответил ошибкой. Что делаем? Пробуем еще раз или откатываем сдвиг полученных сообщений?
+                print(f'ClickHouse Error: {e}')
+        else:
+            print('No new messages.')
 
         kafka.unsubscribe()
 
