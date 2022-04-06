@@ -1,5 +1,4 @@
 from clickhouse_driver import Client
-
 from settings.settings import ClickHouseSettings
 
 

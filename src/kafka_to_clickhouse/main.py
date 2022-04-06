@@ -11,8 +11,13 @@ from settings import get_logger, Settings
 
 logger = get_logger('main')
 
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-def main():
+my_scheduler = BlockingScheduler()
+
+
+@my_scheduler.scheduled_job('interval', minutes=1)
+def etl_process():
     settings = Settings()
     clickhouse: Client = get_client(settings.clickhouse)
     kafka: Consumer = get_consumer(settings.kafka)
@@ -53,4 +58,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    my_scheduler.start()
