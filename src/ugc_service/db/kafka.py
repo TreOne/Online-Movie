@@ -18,9 +18,12 @@ async def get_kafka_producer() -> AIOKafkaProducer:
 
 
 @backoff.on_exception(backoff.expo, KafkaConnectionError, on_backoff=backoff_hdlr)
-async def kafka_connect():
+async def kafka_reconnect():
     """Устанавливает подключение к сервису Apache Kafka."""
     global kafka_producer
+    if kafka_producer:
+        await kafka_producer.stop()
+        await kafka_producer.client.close()
     logger.info("Check connection to Kafka server.")
     kafka_producer = AIOKafkaProducer(
         bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,

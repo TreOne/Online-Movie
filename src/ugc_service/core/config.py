@@ -17,10 +17,9 @@ PROJECT_LICENSE_INFO: dict[str, str] = {
 
 # env Variable
 KAFKA_BOOTSTRAP_SERVERS: str = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
-KAFKA_TOPIC: str = os.getenv("KAFKA_BOOTSTRAP_SERVERS")
-KAFKA_CONSUMER_GROUP: str = os.getenv("KAFKA_CONSUMER_GROUP")
+KAFKA_TOPIC: str = os.getenv("KAFKA_TOPIC", "movie_watches")
 KAFKA_REQUEST_TIMEOUT_MS: int = int(os.getenv("KAFKA_REQUEST_TIMEOUT_MS", 5000))
 
 # JWT
-jwt_secret_key: str = os.getenv("SECRET_KEY", "buz")
+jwt_secret_key: str = os.getenv("JWT_SECRET_KEY", "buz")
 jwt_algorithms: list[str] = ["HS256"]

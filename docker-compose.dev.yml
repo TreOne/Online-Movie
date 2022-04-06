@@ -6,6 +6,7 @@ services:
     volumes:
       - static_volume:/home/app/admin_panel/static
       - media_volume:/home/app/admin_panel/media
+      - ./log/nginx:/var/log/nginx
     ports:
       - "80:80"
     depends_on:
@@ -160,7 +161,7 @@ services:
       - movie_network
 
   kafka:
-    image: bitnami/kafka:2.8.0
+    image: bitnami/kafka:3.1
     expose:
       - 9092
     environment:
@@ -170,18 +171,18 @@ services:
     depends_on:
       - zookeeper
     volumes:
-      - kafka_data:/bitnami/kafka
+      - kafka_data:/bitnami
     networks:
       - movie_network
 
   zookeeper:
-    image: bitnami/zookeeper:3.7.0
+    image: bitnami/zookeeper:3.8
     expose:
       - 2181
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
-      - zookeeper_data:/bitnami/zookeeper
+      - zookeeper_data:/bitnami
     networks:
       - movie_network
 
@@ -242,7 +243,7 @@ services:
     ports:
       - "9000:9000"
     environment:
-      KAFKA_BROKERCONNECT: "kafka:9092"
+      KAFKA_BROKERCONNECT: "kafka:29092"
     depends_on:
       - kafka
     networks:

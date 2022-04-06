@@ -3,7 +3,7 @@ from http import HTTPStatus
 import uvicorn
 from core import config
 from core.config import jwt_algorithms, jwt_secret_key
-from db.kafka import kafka_connect, kafka_disconnect
+from db.kafka import kafka_reconnect, kafka_disconnect
 from fastapi import FastAPI, Request
 from fastapi.responses import ORJSONResponse
 from jose import JWTError, jwt
@@ -24,7 +24,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    await kafka_connect()
+    await kafka_reconnect()
 
 
 @app.on_event("shutdown")

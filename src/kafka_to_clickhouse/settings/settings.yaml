@@ -14,7 +14,6 @@ tasks:
     kafka:
       topics:
         - movie_watches
-      timeout: 20.0
     clickhouse:
       table: movie_watches
       table_ddl: "etl_tasks/movie_watch/table.sql"

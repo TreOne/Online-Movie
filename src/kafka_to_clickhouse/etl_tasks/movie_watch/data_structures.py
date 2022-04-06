@@ -3,8 +3,9 @@ import uuid
 from dataclasses import astuple, dataclass
 
 from confluent_kafka import Message
-from etl_tasks.abc_data_structure import TransferClass
 from orjson import orjson
+
+from etl_tasks.abc_data_structure import TransferClass
 
 
 @dataclass(frozen=True)

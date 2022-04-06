@@ -1,6 +1,8 @@
 from http import HTTPStatus
 
 from aiokafka import AIOKafkaProducer
+
+from db.kafka import kafka_reconnect
 from engines.oltp.general import OLTPEngine
 from fastapi import HTTPException
 from kafka.errors import KafkaError
@@ -18,6 +20,7 @@ class KafkaOLTPEngine(OLTPEngine):
         try:
             await self.kafka_producer.send_and_wait(topic=topic, value=message)
         except KafkaError:
+            await kafka_reconnect()  # TODO: Превратить это в бэкграунд задачу так как время реконекта может быть долгим.
             raise HTTPException(
                 status_code=HTTPStatus.GATEWAY_TIMEOUT,
                 detail="The database is not responding.",

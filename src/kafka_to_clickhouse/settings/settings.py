@@ -18,7 +18,6 @@ class ClickHouseSettings(BaseModel):
 
 class KafkaTaskSettings(BaseModel):
     topics: List[str]
-    timeout: float
 
 
 class ClickHouseTaskSettings(BaseModel):

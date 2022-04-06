@@ -8,8 +8,8 @@ from confluent_kafka import Consumer
 from engines.click_house import create_table, get_client, table_is_exist
 from engines.kafka import get_consumer
 from etl_tasks.abc_data_structure import TransferClass
+from settings.settings import Settings
 from utils import get_logger
-from settings import Settings
 
 
 logger = get_logger('main')
@@ -28,7 +28,7 @@ def etl_process():
             create_table(clickhouse, task.clickhouse.table_ddl.read_text('utf-8'))
         kafka.subscribe(topics=task.kafka.topics)
 
-        messages = kafka.consume(num_messages=task.num_messages, timeout=task.kafka.timeout)
+        messages = kafka.consume(num_messages=task.num_messages)
         data_class: Type[TransferClass] = task.data_class
         watches = []
         for message in messages:
