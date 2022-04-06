@@ -2,9 +2,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Type
 
 import yaml
-from pydantic import BaseModel, BaseSettings, FilePath
-
 from etl_tasks.abc_data_structure import TransferClass
+from pydantic import BaseModel, BaseSettings, FilePath
 
 
 class KafkaSettings(BaseModel):

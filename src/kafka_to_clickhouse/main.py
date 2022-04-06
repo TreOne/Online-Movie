@@ -8,7 +8,7 @@ from confluent_kafka import Consumer
 from engines.click_house import create_table, get_client, table_is_exist
 from engines.kafka import get_consumer
 from etl_tasks.abc_data_structure import TransferClass
-from settings.logger import get_logger
+from utils import get_logger
 from settings import Settings
 
 
