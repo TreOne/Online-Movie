@@ -1,5 +1,6 @@
 from typing import Type
 
+from apscheduler.schedulers.blocking import BlockingScheduler
 from clickhouse_driver import Client
 from clickhouse_driver.errors import ServerException
 from confluent_kafka import Consumer
@@ -7,12 +8,11 @@ from confluent_kafka import Consumer
 from engines.click_house import create_table, get_client, table_is_exist
 from engines.kafka import get_consumer
 from etl_tasks.abc_data_structure import TransferClass
-from settings import get_logger, Settings
+from settings.logger import get_logger
+from settings import Settings
+
 
 logger = get_logger('main')
-
-from apscheduler.schedulers.blocking import BlockingScheduler
-
 my_scheduler = BlockingScheduler()
 
 
@@ -43,7 +43,7 @@ def etl_process():
             data = [watch.get_tuple() for watch in watches]
             query = data_class.get_insert_query()
             try:
-                result = clickhouse.execute(query, data)
+                clickhouse.execute(query, data)
                 logger.info(f'Successfully added {len(data)} new messages in ClickHouse')
             except ServerException as e:
                 # TODO: КХ ответил ошибкой. Что делаем? Пробуем еще раз или откатываем сдвиг полученных сообщений?
