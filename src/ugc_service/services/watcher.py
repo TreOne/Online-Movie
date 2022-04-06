@@ -7,6 +7,7 @@ from db.kafka import get_kafka_producer
 from engines.oltp.general import OLTPEngine
 from engines.oltp.kafka import KafkaOLTPEngine
 from fastapi import Depends
+from core import config
 
 
 class WatcherService:
@@ -23,7 +24,7 @@ class WatcherService:
             'view_ts': view_ts,
         }
         await self.oltp_engine.send(
-            topic='movie_watches', message=orjson.dumps(message)
+            topic=config.KAFKA_TOPIC, message=orjson.dumps(message)
         )
 
 
