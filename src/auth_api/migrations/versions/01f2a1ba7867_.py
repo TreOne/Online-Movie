@@ -20,7 +20,7 @@ depends_on = None
 def upgrade():
     op.add_column('users', sa.Column('is_totp_enabled', sa.Boolean(), nullable=False))
     op.add_column(
-        'users', sa.Column('two_factor_secret', sa.String(length=255), nullable=True)
+        'users', sa.Column('two_factor_secret', sa.String(length=255), nullable=True),
     )
     op.add_column('users', sa.Column('social_id', sa.String(length=255), nullable=True))
     op.alter_column('users', 'email', existing_type=sa.VARCHAR(length=80), nullable=True)
@@ -41,7 +41,7 @@ def downgrade():
         sa.Column('ip_address', sa.VARCHAR(length=40), autoincrement=False, nullable=False),
         sa.Column('created_at', postgresql.TIMESTAMP(), autoincrement=False, nullable=False),
         sa.ForeignKeyConstraint(
-            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey'
+            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey',
         ),
         sa.PrimaryKeyConstraint('uuid', 'device', name='auth_history_desktop_pkey'),
     )
@@ -54,7 +54,7 @@ def downgrade():
         sa.Column('ip_address', sa.VARCHAR(length=40), autoincrement=False, nullable=False),
         sa.Column('created_at', postgresql.TIMESTAMP(), autoincrement=False, nullable=False),
         sa.ForeignKeyConstraint(
-            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey'
+            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey',
         ),
         sa.PrimaryKeyConstraint('uuid', 'device', name='auth_history_other_pkey'),
     )
@@ -67,7 +67,7 @@ def downgrade():
         sa.Column('ip_address', sa.VARCHAR(length=40), autoincrement=False, nullable=False),
         sa.Column('created_at', postgresql.TIMESTAMP(), autoincrement=False, nullable=False),
         sa.ForeignKeyConstraint(
-            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey'
+            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey',
         ),
         sa.PrimaryKeyConstraint('uuid', 'device', name='auth_history_mobile_pkey'),
     )
@@ -80,7 +80,7 @@ def downgrade():
         sa.Column('ip_address', sa.VARCHAR(length=40), autoincrement=False, nullable=False),
         sa.Column('created_at', postgresql.TIMESTAMP(), autoincrement=False, nullable=False),
         sa.ForeignKeyConstraint(
-            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey'
+            ['user_uuid'], ['users.uuid'], name='auth_history_user_uuid_fkey',
         ),
         sa.PrimaryKeyConstraint('uuid', 'device', name='auth_history_tablet_pkey'),
     )

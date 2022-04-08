@@ -48,21 +48,21 @@ def upgrade():
         sa.Column('device', sa.String(length=40), nullable=False),
         sa.Column('ip_address', sa.String(length=40), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
-        sa.ForeignKeyConstraint(('user_uuid',), ['users.uuid'],),
+        sa.ForeignKeyConstraint(('user_uuid',), ['users.uuid']),
         sa.PrimaryKeyConstraint('uuid', 'device'),
         postgresql_partition_by='LIST (device)',
     )
     op.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_desktop PARTITION OF auth_history FOR VALUES IN ('desktop');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_desktop PARTITION OF auth_history FOR VALUES IN ('desktop');""",
     )
     op.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_tablet PARTITION OF auth_history FOR VALUES IN ('tablet');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_tablet PARTITION OF auth_history FOR VALUES IN ('tablet');""",
     )
     op.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_mobile PARTITION OF auth_history FOR VALUES IN ('mobile');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_mobile PARTITION OF auth_history FOR VALUES IN ('mobile');""",
     )
     op.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_other PARTITION OF auth_history FOR VALUES IN ('other');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_other PARTITION OF auth_history FOR VALUES IN ('other');""",
     )
 
     op.create_table(
@@ -70,8 +70,8 @@ def upgrade():
         sa.Column('uuid', auth_api.models.custom_field_types.GUID(), nullable=False),
         sa.Column('users_uuid', auth_api.models.custom_field_types.GUID(), nullable=True),
         sa.Column('roles_uuid', auth_api.models.custom_field_types.GUID(), nullable=True),
-        sa.ForeignKeyConstraint(('roles_uuid',), ['roles.uuid'],),
-        sa.ForeignKeyConstraint(('users_uuid',), ['users.uuid'],),
+        sa.ForeignKeyConstraint(('roles_uuid',), ['roles.uuid']),
+        sa.ForeignKeyConstraint(('users_uuid',), ['users.uuid']),
         sa.PrimaryKeyConstraint('uuid'),
     )
 

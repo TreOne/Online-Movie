@@ -24,17 +24,17 @@ async def kafka_reconnect():
     if kafka_producer:
         await kafka_producer.stop()
         await kafka_producer.client.close()
-    logger.info("Check connection to Kafka server.")
+    logger.info('Check connection to Kafka server.')
     kafka_producer = AIOKafkaProducer(
         bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
         request_timeout_ms=KAFKA_REQUEST_TIMEOUT_MS,
     )
     await kafka_producer.start()
-    logger.info("Successfully connected to Kafka server.")
+    logger.info('Successfully connected to Kafka server.')
 
 
 async def kafka_disconnect():
     """Закрывает подключение к сервису Apache Kafka."""
     global kafka_producer
     await kafka_producer.stop()
-    logger.info(" Successfully disconnected from Kafka server.")
+    logger.info(' Successfully disconnected from Kafka server.')

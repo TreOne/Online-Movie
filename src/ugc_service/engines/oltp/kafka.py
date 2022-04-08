@@ -23,5 +23,5 @@ class KafkaOLTPEngine(OLTPEngine):
             await kafka_reconnect()  # TODO: Превратить это в бэкграунд задачу так как время реконекта может быть долгим.
             raise HTTPException(
                 status_code=HTTPStatus.GATEWAY_TIMEOUT,
-                detail="The database is not responding.",
+                detail='The database is not responding.',
             )

@@ -1,6 +1,6 @@
 import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import Field
 
@@ -48,7 +48,7 @@ class Person(PersonBrief):
     birth_date: Optional[datetime.date] = Field(
         title='Дата рождения', example='1989-05-31',
     )
-    film_works: List[PersonFilm] = Field(
+    film_works: list[PersonFilm] = Field(
         default=[],
         title='Фильмы',
         example=[

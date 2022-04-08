@@ -70,7 +70,7 @@ def configure_cli(app):
 def configure_apispec(app):
     apispec.init_app(app, security=[{'jwt': []}])
     apispec.spec.components.security_scheme(
-        'jwt', {'type': 'http', 'scheme': 'bearer', 'bearerFormat': 'JWT'}
+        'jwt', {'type': 'http', 'scheme': 'bearer', 'bearerFormat': 'JWT'},
     )
     apispec.spec.components.schema(
         'PaginatedResult',
@@ -80,7 +80,7 @@ def configure_apispec(app):
                 'pages': {'type': 'integer', 'example': 1},
                 'next': {'type': 'string', 'example': '/path/to/endpoint?page=1&per_page=50'},
                 'prev': {'type': 'string', 'example': '/path/to/endpoint?page=1&per_page=50'},
-            }
+            },
         },
     )
     apispec.spec.components.schema(
@@ -95,21 +95,21 @@ def configure_apispec(app):
                     'type': 'string',
                     'example': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1...',
                 },
-            }
+            },
         },
     )
     apispec.spec.components.schema(
         'Message',
         {
             'type': 'object',
-            'properties': {'msg': {'type': 'string', 'example': 'Сообщение пользователю.'},},
+            'properties': {'msg': {'type': 'string', 'example': 'Сообщение пользователю.'}},
         },
     )
     apispec.spec.components.schema(
         'ErrorMessage',
         {
             'type': 'object',
-            'properties': {'msg': {'type': 'string', 'example': 'Подробности ошибки.'},},
+            'properties': {'msg': {'type': 'string', 'example': 'Подробности ошибки.'}},
         },
     )
     apispec.spec.components.response(
@@ -118,7 +118,7 @@ def configure_apispec(app):
             'description': 'Ошибка в переданных данных. Подробности в тексте ошибки.',
             'content': {
                 'application/json': {
-                    'schema': {'$ref': '#/components/schemas/ErrorMessage',},
+                    'schema': {'$ref': '#/components/schemas/ErrorMessage'},
                 },
             },
         },
@@ -129,7 +129,7 @@ def configure_apispec(app):
             'description': 'Ошибка авторизации.',
             'content': {
                 'application/json': {
-                    'schema': {'$ref': '#/components/schemas/ErrorMessage',},
+                    'schema': {'$ref': '#/components/schemas/ErrorMessage'},
                 },
             },
         },
@@ -140,7 +140,7 @@ def configure_apispec(app):
             'description': 'Доступ запрещён.',
             'content': {
                 'application/json': {
-                    'schema': {'$ref': '#/components/schemas/ErrorMessage',},
+                    'schema': {'$ref': '#/components/schemas/ErrorMessage'},
                 },
             },
         },
@@ -151,7 +151,7 @@ def configure_apispec(app):
             'description': 'Объект не найден.',
             'content': {
                 'application/json': {
-                    'schema': {'$ref': '#/components/schemas/ErrorMessage',},
+                    'schema': {'$ref': '#/components/schemas/ErrorMessage'},
                 },
             },
         },
@@ -162,7 +162,7 @@ def configure_apispec(app):
             'description': 'Превышен лимит запросов.',
             'content': {
                 'application/json': {
-                    'schema': {'$ref': '#/components/schemas/ErrorMessage',},
+                    'schema': {'$ref': '#/components/schemas/ErrorMessage'},
                 },
             },
         },

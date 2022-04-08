@@ -1,0 +1,36 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+    -   id: trailing-whitespace  # убирает лишние пробелы
+    -   id: check-added-large-files  # проверяет тяжелые файлы
+    -   id: end-of-file-fixer  # добавляет пустую строку в конце файла
+#    -   id: check-yaml  # проверяет синтаксис .yaml файлов
+    -   id: double-quote-string-fixer  # заменяет " на '
+
+# Добавляет пропущенные запятые
+-   repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.2.2
+    hooks:
+    -   id: add-trailing-comma
+        args: [--py36-plus]
+
+# Обновляет синтаксис Python кода в соответствии с последними версиями
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v2.31.1
+    hooks:
+    -   id: pyupgrade
+        args: [--py38-plus]
+
+# Форматирует код под PEP8
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.6.0
+    hooks:
+    -   id: autopep8
+
+# Сканер стилистических ошибок, нарушающие договоренности PEP8
+-   repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+    -   id: flake8
+        args: [ "--ignore=W503,E501,F401" ]

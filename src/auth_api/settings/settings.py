@@ -76,7 +76,7 @@ class Settings(BaseSettings):
             )
 
 
-def yaml_settings_source(settings: BaseSettings) -> Dict[str, Any]:
+def yaml_settings_source(settings: BaseSettings) -> dict[str, Any]:
     """Возвращает настройки из файла settings.yaml."""
     settings_path = Path(__file__).parent / 'settings.yaml'
     with settings_path.open('r', encoding='utf-8') as f:

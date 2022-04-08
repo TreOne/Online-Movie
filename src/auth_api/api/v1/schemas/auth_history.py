@@ -6,7 +6,7 @@ from auth_api.models.user import AuthHistory
 
 class AuthHistorySchema(ma.SQLAlchemyAutoSchema):
     user_agent = auto_field(
-        example='Chrome/98.0.4758.109 Safari/537.36 OPR/84.0.4316.31 (Edition Yx 05)'
+        example='Chrome/98.0.4758.109 Safari/537.36 OPR/84.0.4316.31 (Edition Yx 05)',
     )
     ip_address = auto_field(example='127.0.0.1')
     date = auto_field('created_at', dump_only=True)

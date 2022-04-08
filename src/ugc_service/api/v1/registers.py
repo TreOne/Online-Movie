@@ -6,13 +6,13 @@ from fastapi import APIRouter, Body, Depends, HTTPException, Request
 from models.general import Response
 from services.watcher import WatcherService, get_watcher_service
 
-router = APIRouter(prefix="/registers", tags=["Регистраторы"])
+router = APIRouter(prefix='/registers', tags=['Регистраторы'])
 
 
 @router.post(
-    path="/film_watch",
-    name="Просмотр фильма",
-    description="Регистрация процесса просмотра фильма.",
+    path='/film_watch',
+    name='Просмотр фильма',
+    description='Регистрация процесса просмотра фильма.',
     response_model=Response,
 )
 async def film_watch(
@@ -27,9 +27,9 @@ async def film_watch(
     except ValueError:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail="Badly formed hexadecimal UUID string.",
+            detail='Badly formed hexadecimal UUID string.',
         )
     await watcher_service.register_movie_watch(
-        movie_id=movie_id, client_id=client_id, view_ts=view_ts
+        movie_id=movie_id, client_id=client_id, view_ts=view_ts,
     )
-    return Response(msg="ОК")
+    return Response(msg='ОК')

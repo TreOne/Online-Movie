@@ -32,7 +32,7 @@ async def redis_connect():
     """Устанавливает подключение к сервису Redis."""
     global redis
     redis = await aioredis.create_redis_pool(
-        (config.REDIS_HOST, config.REDIS_PORT), minsize=10, maxsize=20
+        (config.REDIS_HOST, config.REDIS_PORT), minsize=10, maxsize=20,
     )
     await redis_ping()
     logger.info('Successfully connected to redis server.')

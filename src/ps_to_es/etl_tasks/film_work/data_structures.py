@@ -1,6 +1,5 @@
 import datetime
 from dataclasses import dataclass
-from typing import Dict, List
 
 
 @dataclass(frozen=True)
@@ -27,11 +26,11 @@ class FilmWork:
     description: str
     updated_at: datetime.datetime
 
-    genres: List[FilmWorkGenre]
-    persons: List[FilmWorkPerson]
+    genres: list[FilmWorkGenre]
+    persons: list[FilmWorkPerson]
 
     @staticmethod
-    def create_from_sql_data(data: Dict) -> 'FilmWork':
+    def create_from_sql_data(data: dict) -> 'FilmWork':
         genres = [
             FilmWorkGenre(*raw_genre.split('<separator>'))
             for raw_genre in data['genres']

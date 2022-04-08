@@ -1,7 +1,6 @@
 import uuid as _uuid
 from functools import wraps
 from http.client import BAD_REQUEST, FORBIDDEN
-from typing import Dict
 
 from flask import current_app, jsonify
 from flask_jwt_extended import (
@@ -88,7 +87,7 @@ def activate_refresh_token(encoded_refresh_token: str):
 
 
 @trace
-def deactivate_access_token(access_token: Dict):
+def deactivate_access_token(access_token: dict):
     """Добавляет access-токен в базу заблокированных access-токенов."""
     access_uuid = get_token_uuid_from_token(access_token)
     exp_time = get_token_exp_from_token(access_token)
@@ -96,7 +95,7 @@ def deactivate_access_token(access_token: Dict):
 
 
 @trace
-def deactivate_refresh_token(refresh_token: Dict):
+def deactivate_refresh_token(refresh_token: dict):
     """Удаляет refresh-токен из базы активных refresh-токенов."""
     refresh_uuid = get_token_uuid_from_token(refresh_token)
     user_uuid = get_user_uuid_from_token(refresh_token)
@@ -104,7 +103,7 @@ def deactivate_refresh_token(refresh_token: Dict):
 
 
 @trace
-def deactivate_refresh_token_by_access_token(access_token: Dict):
+def deactivate_refresh_token_by_access_token(access_token: dict):
     """Блокирует refresh-токен связанный с access-токеном."""
     refresh_uuid = access_token['refresh_uuid']
     user_uuid = get_user_uuid_from_token(access_token)
@@ -126,25 +125,25 @@ def get_uuid_from_encoded_refresh_token(encoded_refresh_token: str):
 
 
 @trace
-def get_user_uuid_from_token(token: Dict):
+def get_user_uuid_from_token(token: dict):
     """Возвращает UUID пользователя из JWT токена."""
     return token[current_app.config['JWT_IDENTITY_CLAIM']]
 
 
 @trace
-def get_token_uuid_from_token(token: Dict):
+def get_token_uuid_from_token(token: dict):
     """Возвращает UUID токена из JWT токена."""
     return token['jti']
 
 
 @trace
-def get_token_exp_from_token(token: Dict):
+def get_token_exp_from_token(token: dict):
     """Возвращает время жизни токена из JWT токена."""
     return token['exp']
 
 
 @trace
-def is_active_token(token: Dict):
+def is_active_token(token: dict):
     """Проверяет, активен ли переданный токен."""
     token_type = token['type']
     if token_type == 'access':
@@ -156,7 +155,7 @@ def is_active_token(token: Dict):
 
 
 @trace
-def is_active_refresh_token(refresh_token: Dict):
+def is_active_refresh_token(refresh_token: dict):
     """Проверяет, активен ли переданный refresh-токен."""
     refresh_uuid = get_token_uuid_from_token(refresh_token)
     user_uuid = get_user_uuid_from_token(refresh_token)
@@ -164,7 +163,7 @@ def is_active_refresh_token(refresh_token: Dict):
 
 
 @trace
-def is_active_access_token(access_token: Dict):
+def is_active_access_token(access_token: dict):
     """Проверяет, активен ли переданный access-токен."""
     access_uuid = get_token_uuid_from_token(access_token)
     token_in_blocklist = blocked_access_tokens.get(access_uuid)

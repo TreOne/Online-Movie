@@ -14,7 +14,7 @@ from services.genre import GenreService
 from services.person import PersonService
 
 
-@lru_cache()
+@lru_cache
 def get_film_service(
     redis: Redis = Depends(get_redis), elastic: AsyncElasticsearch = Depends(get_elastic),
 ) -> FilmService:
@@ -23,7 +23,7 @@ def get_film_service(
     return FilmService(redis_cache, elastic_search)
 
 
-@lru_cache()
+@lru_cache
 def get_genre_service(
     redis: Redis = Depends(get_redis), elastic: AsyncElasticsearch = Depends(get_elastic),
 ) -> GenreService:
@@ -32,7 +32,7 @@ def get_genre_service(
     return GenreService(redis_cache, elastic_search)
 
 
-@lru_cache()
+@lru_cache
 def get_person_service(
     redis: Redis = Depends(get_redis), elastic: AsyncElasticsearch = Depends(get_elastic),
 ) -> PersonService:

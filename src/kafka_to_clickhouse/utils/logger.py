@@ -11,7 +11,7 @@ def get_logger(logger_name: str, level: Optional[int] = logging.DEBUG) -> loggin
     logger.setLevel(level)
     os.makedirs('logs/', exist_ok=True)
     handler = RotatingFileHandler(
-        f'logs/{logger_name}.log', maxBytes=10 * 1024 * 1024, backupCount=5, encoding='utf-8'
+        f'logs/{logger_name}.log', maxBytes=10 * 1024 * 1024, backupCount=5, encoding='utf-8',
     )
     handler.setFormatter(logging.Formatter(log_format))
     logger.addHandler(handler)

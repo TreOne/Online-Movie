@@ -50,7 +50,7 @@ def get_providers_list():
             {
                 'name': provider,
                 'properties': OAuthClient.get_provider(provider).get_data_for_authorize(),
-            }
+            },
         )
     return jsonify({'providers': providers_data})
 
@@ -139,7 +139,7 @@ def oauth_login(provider):
             user_agent=request.user_agent.string,
             ip_address=request.remote_addr,
             device=get_device_type(request.user_agent.string),
-        )
+        ),
     )
     db.session.commit()
 

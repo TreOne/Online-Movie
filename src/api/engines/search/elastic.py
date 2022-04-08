@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Optional
 
 from elasticsearch import AsyncElasticsearch, NotFoundError
 from elasticsearch_dsl import Search
@@ -15,7 +15,7 @@ class ElasticSearchEngine(SearchEngine):
     def __init__(self, service: AsyncElasticsearch):
         self.elastic = service
 
-    async def get_by_pk(self, table: str, pk: str) -> Optional[Dict]:
+    async def get_by_pk(self, table: str, pk: str) -> Optional[dict]:
         """Возвращает объект по ключу."""
         try:
             doc = await self.elastic.get(index=table, id=pk)
@@ -36,7 +36,7 @@ class ElasticSearchEngine(SearchEngine):
                         fields=params.query_fields,
                         operator='and',
                         fuzziness='AUTO',
-                    )
+                    ),
                 )
 
             # Сортировка
@@ -49,7 +49,7 @@ class ElasticSearchEngine(SearchEngine):
                     Nested(
                         path=params.filter_field,
                         query=Term(**{f'{params.filter_field}__uuid': params.filter_value}),
-                    )
+                    ),
                 )
 
             # Пагинация

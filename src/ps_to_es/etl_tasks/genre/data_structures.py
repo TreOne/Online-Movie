@@ -12,7 +12,7 @@ class Genre:
     updated_at: datetime.datetime
 
     @staticmethod
-    def create_from_sql_data(data: Dict) -> 'Genre':
+    def create_from_sql_data(data: dict) -> 'Genre':
         return Genre(
             id=data['id'],
             name=data['name'],

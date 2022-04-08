@@ -1,4 +1,4 @@
-from typing import Generic, List, Optional, TypeVar
+from typing import Generic, Optional, TypeVar
 
 import orjson
 from pydantic import BaseModel, Field
@@ -22,7 +22,7 @@ PT = TypeVar('PT')
 class Page(FastJsonModel, Generic[PT]):
     """Страница результатов с пагинацией."""
 
-    items: List[PT] = Field(
+    items: list[PT] = Field(
         default=[], title='Список объектов',
     )
 

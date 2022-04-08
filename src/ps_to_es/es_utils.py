@@ -1,5 +1,4 @@
 import json
-from typing import Dict, List, Tuple
 
 import backoff
 import elasticsearch
@@ -16,12 +15,12 @@ def backoff_hdlr(details):
     logger.error(
         'Взяли паузу {wait:0.1f} секунд после {tries} попыток '
         'вызова функции {target} с аргументами {args} и позиционными аргументами '
-        '{kwargs}'.format(**details)
+        '{kwargs}'.format(**details),
     )
 
 
 @backoff.on_exception(
-    backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr
+    backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr,
 )
 def get_connection() -> Elasticsearch:
     """Организует подключение к Elasticsearch."""
@@ -47,18 +46,18 @@ class ES:
         self._es = get_connection()
 
     @backoff.on_exception(
-        backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr
+        backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr,
     )
     def is_index_exist(self, index_name: str) -> bool:
         """Проверяет существование индекса в базе."""
         return self._es.indices.exists(index=index_name)
 
     @backoff.on_exception(
-        backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr
+        backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr,
     )
     def create_index(
-        self, index_name: str, index_mapping: Dict, index_settings: Dict = None
-    ) -> Dict:
+        self, index_name: str, index_mapping: dict, index_settings: dict = None,
+    ) -> dict:
         """Создает индекс в базе."""
         result = self._es.indices.create(
             index=index_name,
@@ -67,14 +66,14 @@ class ES:
             ignore=400,  # Игнорирование кода 400 - Индекс уже существует
         )
         logger.info(
-            f'Результат создания индекса "{index_name}":\n' f'{json.dumps(result, indent=2)}'
+            f'Результат создания индекса "{index_name}":\n' f'{json.dumps(result, indent=2)}',
         )
         return result
 
     @backoff.on_exception(
-        backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr
+        backoff.expo, elasticsearch.exceptions.ConnectionError, on_backoff=backoff_hdlr,
     )
-    def insert_chunk(self, chunk: List[Dict], es_index: str) -> Tuple[int, List]:
+    def insert_chunk(self, chunk: list[dict], es_index: str) -> tuple[int, list]:
         return helpers.bulk(self._es, chunk, index=es_index)
 
 

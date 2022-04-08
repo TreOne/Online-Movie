@@ -60,7 +60,7 @@ def get_self_history():
     token = get_jwt()
     user_uuid = token['user_uuid']
     auth_history = AuthHistory.query.filter_by(user_uuid=user_uuid).order_by(
-        AuthHistory.created_at.desc()
+        AuthHistory.created_at.desc(),
     )
     schema = AuthHistorySchema(many=True)
 

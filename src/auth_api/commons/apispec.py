@@ -21,7 +21,7 @@ class FlaskRestfulPlugin(FlaskPlugin):
                 endpoint = ept
 
         if not endpoint:
-            raise APISpecError('Could not find endpoint for view {0}'.format(view))
+            raise APISpecError(f'Could not find endpoint for view {view}')
 
         # WARNING: Assume 1 rule per view function for now
         rule = app.url_map._rules_by_endpoint[endpoint][0]
@@ -52,7 +52,7 @@ class APISpecExt:
             version=app.config['APISPEC_VERSION'],
             openapi_version=app.config['OPENAPI_VERSION'],
             plugins=[MarshmallowPlugin(), FlaskRestfulPlugin()],
-            **kwargs
+            **kwargs,
         )
 
         blueprint = Blueprint(
@@ -63,11 +63,11 @@ class APISpecExt:
         )
 
         blueprint.add_url_rule(
-            app.config['SWAGGER_JSON_URL'], 'swagger_json', self.swagger_json
+            app.config['SWAGGER_JSON_URL'], 'swagger_json', self.swagger_json,
         )
         blueprint.add_url_rule(app.config['SWAGGER_UI_URL'], 'swagger_ui', self.swagger_ui)
         blueprint.add_url_rule(
-            app.config['OPENAPI_YAML_URL'], 'openapi_yaml', self.openapi_yaml
+            app.config['OPENAPI_YAML_URL'], 'openapi_yaml', self.openapi_yaml,
         )
         blueprint.add_url_rule(app.config['REDOC_UI_URL'], 'redoc_ui', self.redoc_ui)
 
@@ -86,7 +86,7 @@ class APISpecExt:
                 'name': 'authentication',
                 'x-displayName': 'Authentication',
                 'description': '<SecurityDefinitions />',
-            }
+            },
         )
         redoc_spec = self.spec.to_yaml()
         self.spec._tags.pop(0)

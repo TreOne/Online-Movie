@@ -21,7 +21,7 @@ class User(db.Model):
     is_superuser = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    roles = db.relationship('Role', secondary='links_users_roles',)
+    roles = db.relationship('Role', secondary='links_users_roles')
     is_totp_enabled = db.Column(db.Boolean, default=False, nullable=False)
     two_factor_secret = db.Column(db.String(255))
     social_id = db.Column(db.String(255))
@@ -58,16 +58,16 @@ class UsersRoles(db.Model):
 
 def create_auth_partition(target, connection, **kw) -> None:
     connection.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_desktop PARTITION OF auth_history FOR VALUES IN ('desktop');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_desktop PARTITION OF auth_history FOR VALUES IN ('desktop');""",
     )
     connection.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_tablet PARTITION OF auth_history FOR VALUES IN ('tablet');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_tablet PARTITION OF auth_history FOR VALUES IN ('tablet');""",
     )
     connection.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_mobile PARTITION OF auth_history FOR VALUES IN ('mobile');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_mobile PARTITION OF auth_history FOR VALUES IN ('mobile');""",
     )
     connection.execute(
-        """CREATE TABLE IF NOT EXISTS auth_history_other PARTITION OF auth_history FOR VALUES IN ('other');"""
+        """CREATE TABLE IF NOT EXISTS auth_history_other PARTITION OF auth_history FOR VALUES IN ('other');""",
     )
 
 

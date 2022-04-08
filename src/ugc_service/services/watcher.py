@@ -15,7 +15,7 @@ class WatcherService:
         self.oltp_engine = oltp_engine
 
     async def register_movie_watch(
-        self, movie_id: UUID, client_id: UUID, view_ts: int
+        self, movie_id: UUID, client_id: UUID, view_ts: int,
     ) -> None:
         """Регистрирует сообщение о прогрессе просмотра фильма."""
         message = {
@@ -24,11 +24,11 @@ class WatcherService:
             'view_ts': view_ts,
         }
         await self.oltp_engine.send(
-            topic=config.KAFKA_TOPIC, message=orjson.dumps(message)
+            topic=config.KAFKA_TOPIC, message=orjson.dumps(message),
         )
 
 
-@lru_cache()
+@lru_cache
 def get_watcher_service(
     kafka_producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ) -> WatcherService:

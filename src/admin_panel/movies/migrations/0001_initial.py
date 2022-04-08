@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 (
                     'id',
                     models.UUIDField(
-                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False,
                     ),
                 ),
                 ('title', models.CharField(max_length=255, verbose_name='Title')),
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 (
                     'file_path',
                     models.FileField(
-                        blank=True, null=True, upload_to='film_works/', verbose_name='File'
+                        blank=True, null=True, upload_to='film_works/', verbose_name='File',
                     ),
                 ),
                 (
@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
                 (
                     'id',
                     models.UUIDField(
-                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False,
                     ),
                 ),
                 (
@@ -102,7 +102,7 @@ class Migration(migrations.Migration):
                 (
                     'id',
                     models.UUIDField(
-                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False,
                     ),
                 ),
                 (
@@ -140,7 +140,7 @@ class Migration(migrations.Migration):
                 (
                     'id',
                     models.UUIDField(
-                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False,
                     ),
                 ),
                 ('name', models.CharField(max_length=255, unique=True, verbose_name='Title')),
@@ -167,7 +167,7 @@ class Migration(migrations.Migration):
                 (
                     'id',
                     models.UUIDField(
-                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False,
                     ),
                 ),
                 ('full_name', models.CharField(max_length=255, verbose_name='Full name')),
@@ -186,35 +186,35 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='person',
             constraint=models.UniqueConstraint(
-                fields=('full_name', 'birth_date'), name='unique_person'
+                fields=('full_name', 'birth_date'), name='unique_person',
             ),
         ),
         migrations.AddField(
             model_name='filmworkperson',
             name='film_work',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to='movies.filmwork'
+                on_delete=django.db.models.deletion.CASCADE, to='movies.filmwork',
             ),
         ),
         migrations.AddField(
             model_name='filmworkperson',
             name='person',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to='movies.person'
+                on_delete=django.db.models.deletion.CASCADE, to='movies.person',
             ),
         ),
         migrations.AddField(
             model_name='filmworkgenre',
             name='film_work',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to='movies.filmwork'
+                on_delete=django.db.models.deletion.CASCADE, to='movies.filmwork',
             ),
         ),
         migrations.AddField(
             model_name='filmworkgenre',
             name='genre',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to='movies.genre'
+                on_delete=django.db.models.deletion.CASCADE, to='movies.genre',
             ),
         ),
         migrations.AddField(
@@ -240,13 +240,13 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='filmworkperson',
             constraint=models.UniqueConstraint(
-                fields=('film_work', 'person', 'role'), name='unique_filmwork_person_role_link'
+                fields=('film_work', 'person', 'role'), name='unique_filmwork_person_role_link',
             ),
         ),
         migrations.AddConstraint(
             model_name='filmworkgenre',
             constraint=models.UniqueConstraint(
-                fields=('film_work', 'genre'), name='unique_filmwork_genre_link'
+                fields=('film_work', 'genre'), name='unique_filmwork_genre_link',
             ),
         ),
     ]

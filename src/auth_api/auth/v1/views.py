@@ -80,7 +80,7 @@ def signup():
     user = schema.load(request.json)
 
     existing_user = User.query.filter(
-        or_(User.username == user.username, User.email == user.email)
+        or_(User.username == user.username, User.email == user.email),
     ).first()
     if existing_user:
         return {'msg': 'Username or email is already taken!'}, CONFLICT
@@ -164,7 +164,7 @@ def login():
             user_agent=request.user_agent.string,
             ip_address=request.remote_addr,
             device=get_device_type(request.user_agent.string),
-        )
+        ),
     )
     db.session.commit()
 

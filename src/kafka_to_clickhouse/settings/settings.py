@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Type
+from typing import Any, Type
 
 import yaml
 from etl_tasks.abc_data_structure import TransferClass
@@ -17,7 +17,7 @@ class ClickHouseSettings(BaseModel):
 
 
 class KafkaTaskSettings(BaseModel):
-    topics: List[str]
+    topics: list[str]
 
 
 class ClickHouseTaskSettings(BaseModel):
@@ -39,7 +39,7 @@ class TaskSettings(BaseModel):
 class Settings(BaseSettings):
     kafka: KafkaSettings
     clickhouse: ClickHouseSettings
-    tasks: List[TaskSettings]
+    tasks: list[TaskSettings]
 
     class Config:
         env_nested_delimiter = '__'
@@ -56,7 +56,7 @@ class Settings(BaseSettings):
             )
 
 
-def yaml_settings_source(settings: BaseSettings) -> Dict[str, Any]:
+def yaml_settings_source(settings: BaseSettings) -> dict[str, Any]:
     """Возвращает настройки из файла settings.yaml."""
     settings_path = Path(__file__).parent / 'settings.yaml'
     with settings_path.open('r', encoding='utf-8') as f:

@@ -1,7 +1,7 @@
 import os
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 import yaml
 from pydantic import BaseSettings
@@ -55,10 +55,10 @@ class Settings(BaseSettings):
 
     elastic: Elastic
     postgress_dsn: PostgressDsn
-    etl_tasks: List[ETLTask]
+    etl_tasks: list[ETLTask]
 
 
-@lru_cache()
+@lru_cache
 def get_settings() -> Settings:
     settings = Settings(**yaml_settings)
     settings.postgress_dsn.user = os.environ['POSTGRES_USER']

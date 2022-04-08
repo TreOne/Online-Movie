@@ -19,7 +19,7 @@ if __name__ == '__main__':
     while True:
         for etl_task in settings.etl_tasks:
             last_updated = state.get_state(
-                etl_task.pg.table, '1000-01-01 00:00:00.000000 +0000'
+                etl_task.pg.table, '1000-01-01 00:00:00.000000 +0000',
             )
             data_chunks = pg_extractor.create_iterator(
                 query=etl_task.pg.queries.extract.read_text(),
@@ -41,7 +41,7 @@ if __name__ == '__main__':
                 success, errors = es.insert_chunk(es_data, etl_task.es.index)
                 if not errors:
                     last_updated = data_chunk[-1].updated_at.strftime(
-                        '%Y-%m-%d %H:%M:%S.%f %z'
+                        '%Y-%m-%d %H:%M:%S.%f %z',
                     )
                     logger.info(f'Успешно загружено записей в ElasticSearch: {success}')
                 else:

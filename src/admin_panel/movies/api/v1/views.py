@@ -42,11 +42,11 @@ class MoviesListApi(MoviesApiMixin, BaseListView):
                     filter=Q(filmworkperson__role__iexact=FilmworkpersonRoleChoices.WRITER),
                     distinct=True,
                 ),
-            )
+            ),
         )
 
         paginator, page, results, is_paginated = self.paginate_queryset(
-            queryset, self.paginate_by
+            queryset, self.paginate_by,
         )
 
         context = {

@@ -1,6 +1,6 @@
 import datetime
 from dataclasses import dataclass
-from typing import Iterator, List, Type, TypeVar
+from typing import Iterator, Type, TypeVar
 
 import backoff
 import psycopg2
@@ -27,7 +27,7 @@ def backoff_hdlr(details):
     logger.error(
         'Взяли паузу {wait:0.1f} секунд после {tries} попыток '
         'вызова функции {target} с аргументами {args} и позиционными аргументами '
-        '{kwargs}'.format(**details)
+        '{kwargs}'.format(**details),
     )
 
 
@@ -55,8 +55,8 @@ class PGFilmWorkExtractor:
 
     @backoff.on_exception(backoff.expo, psycopg2.DatabaseError, on_backoff=backoff_hdlr)
     def create_iterator(
-        self, query: str, last_updated: str, chunk_size: int
-    ) -> Iterator[List[DBItem]]:
+        self, query: str, last_updated: str, chunk_size: int,
+    ) -> Iterator[list[DBItem]]:
         """
         Возвращает данные из базы по частям заданной длинны.
 
@@ -66,7 +66,7 @@ class PGFilmWorkExtractor:
         try:
             self.cursor.execute(query, (last_updated,))
             while results := self.cursor.fetchmany(chunk_size):
-                data = list([DBItem(*result) for result in results])
+                data = list(DBItem(*result) for result in results)
                 yield data
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -85,8 +85,8 @@ class PGFilmWorkEnricher:
 
     @backoff.on_exception(backoff.expo, psycopg2.DatabaseError, on_backoff=backoff_hdlr)
     def get_enriched_data_chunk(
-        self, query: str, data_chunk: List[DBItem], data_class: Type[DT]
-    ) -> List[DT]:
+        self, query: str, data_chunk: list[DBItem], data_class: Type[DT],
+    ) -> list[DT]:
         """Возвращает насыщенные данные."""
         item_ids = [data.id for data in data_chunk]
         query = self.cursor.mogrify(query, (item_ids,))

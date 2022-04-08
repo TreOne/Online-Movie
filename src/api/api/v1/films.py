@@ -66,6 +66,6 @@ async def film_list(
         page_number = 1
         page_size = 20
     page = await film_service.get_sorted_filtered(
-        sort, filter_type, filter_value, page_number, page_size
+        sort, filter_type, filter_value, page_number, page_size,
     )
     return page

@@ -13,7 +13,7 @@ class TimeStampedModel(models.Model):
     """
 
     created_at = models.DateTimeField(
-        auto_now_add=True, editable=False, verbose_name=_('Created')
+        auto_now_add=True, editable=False, verbose_name=_('Created'),
     )
     updated_at = models.DateTimeField(auto_now=True, editable=False, verbose_name=_('Updated'))
 
@@ -26,9 +26,9 @@ class Genre(TimeStampedModel):
     Жанр кинопроизведения.
     """
 
-    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
-    name = models.CharField(unique=True, max_length=255, verbose_name=_('Title'),)
-    description = models.TextField(blank=True, null=True, verbose_name=_('Description'),)
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(unique=True, max_length=255, verbose_name=_('Title'))
+    description = models.TextField(blank=True, null=True, verbose_name=_('Description'))
 
     class Meta:
         db_table = 'content"."genre'
@@ -48,9 +48,9 @@ class Person(TimeStampedModel):
     Персона (актёр/режисёр/сценарист).
     """
 
-    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
-    full_name = models.CharField(max_length=255, verbose_name=_('Full name'),)
-    birth_date = models.DateField(blank=True, null=True, verbose_name=_('Birth date'),)
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    full_name = models.CharField(max_length=255, verbose_name=_('Full name'))
+    birth_date = models.DateField(blank=True, null=True, verbose_name=_('Birth date'))
 
     class Meta:
         db_table = 'content"."person'
@@ -58,7 +58,7 @@ class Person(TimeStampedModel):
         verbose_name = _('Person')
         verbose_name_plural = _('Persons')
         constraints = [
-            models.UniqueConstraint(fields=['full_name', 'birth_date'], name='unique_person')
+            models.UniqueConstraint(fields=['full_name', 'birth_date'], name='unique_person'),
         ]
 
     def __str__(self):
@@ -78,11 +78,11 @@ class FilmWork(TimeStampedModel):
     Кинопроизведение (фильм/сериал).
     """
 
-    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
-    title = models.CharField(max_length=255, verbose_name=_('Title'),)
-    description = models.TextField(blank=True, null=True, verbose_name=_('Description'),)
-    creation_date = models.DateField(blank=True, null=True, verbose_name=_('Creation date'),)
-    certificate = models.TextField(blank=True, null=True, verbose_name=_('Certificate'),)
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255, verbose_name=_('Title'))
+    description = models.TextField(blank=True, null=True, verbose_name=_('Description'))
+    creation_date = models.DateField(blank=True, null=True, verbose_name=_('Creation date'))
+    certificate = models.TextField(blank=True, null=True, verbose_name=_('Certificate'))
     file_path = models.FileField(
         blank=True, null=True, verbose_name=_('File'), upload_to='film_works/',
     )
@@ -123,10 +123,10 @@ class FilmWorkGenre(models.Model):
     Связь: Кинопроизведения - Жанры кинопроизведений.
     """
 
-    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
-    film_work = models.ForeignKey(FilmWork, on_delete=models.CASCADE,)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE,)
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created'),)
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    film_work = models.ForeignKey(FilmWork, on_delete=models.CASCADE)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created'))
 
     class Meta:
         db_table = 'content"."genre_film_work'
@@ -134,8 +134,8 @@ class FilmWorkGenre(models.Model):
         verbose_name_plural = _('FilmWorksGenres')
         constraints = [
             models.UniqueConstraint(
-                fields=['film_work', 'genre'], name='unique_filmwork_genre_link'
-            )
+                fields=['film_work', 'genre'], name='unique_filmwork_genre_link',
+            ),
         ]
 
     def __str__(self):
@@ -153,16 +153,16 @@ class FilmWorkPerson(models.Model):
     Связь: Кинопроизведения - Персоны.
     """
 
-    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
-    film_work = models.ForeignKey(FilmWork, on_delete=models.CASCADE,)
-    person = models.ForeignKey(Person, on_delete=models.CASCADE,)
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    film_work = models.ForeignKey(FilmWork, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     role = models.CharField(
         max_length=25,
         verbose_name=_('Role'),
         choices=FilmworkpersonRoleChoices.choices,
         default=FilmworkpersonRoleChoices.ACTOR,
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created'),)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created'))
 
     class Meta:
         db_table = 'content"."person_film_work'
@@ -170,8 +170,8 @@ class FilmWorkPerson(models.Model):
         verbose_name_plural = _('FilmWorksPersons')
         constraints = [
             models.UniqueConstraint(
-                fields=['film_work', 'person', 'role'], name='unique_filmwork_person_role_link'
-            )
+                fields=['film_work', 'person', 'role'], name='unique_filmwork_person_role_link',
+            ),
         ]
 
     def __str__(self):

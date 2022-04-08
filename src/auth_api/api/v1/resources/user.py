@@ -365,7 +365,7 @@ class UserList(Resource):
         user = schema.load(request.json)
 
         existing_user = User.query.filter(
-            or_(User.username == user.username, User.email == user.email)
+            or_(User.username == user.username, User.email == user.email),
         ).first()
         if existing_user:
             return {'msg': 'Username or email is already taken!'}, CONFLICT

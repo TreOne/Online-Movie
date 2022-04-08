@@ -1,7 +1,7 @@
 import abc
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from log_utils import get_logger
 
@@ -15,12 +15,12 @@ class BaseStorage:
     """
 
     @abc.abstractmethod
-    def save_state(self, state: Dict) -> None:
+    def save_state(self, state: dict) -> None:
         """Сохраняет состояние в постоянное хранилище."""
         pass
 
     @abc.abstractmethod
-    def retrieve_state(self) -> Dict:
+    def retrieve_state(self) -> dict:
         """Загружает состояние из постоянного хранилища."""
         pass
 
@@ -33,16 +33,16 @@ class JsonFileStorage(BaseStorage):
     def __init__(self, file_path: Path = None):
         self.file_path = file_path
 
-    def save_state(self, state: Dict) -> None:
+    def save_state(self, state: dict) -> None:
         """Сохраняет состояние в постоянное хранилище."""
         with self.file_path.open(mode='w+', encoding='utf-8') as f:
             json.dump(state, f, ensure_ascii=False)
 
-    def retrieve_state(self) -> Dict:
+    def retrieve_state(self) -> dict:
         """Загружает состояние из постоянного хранилища."""
         if not self.file_path.is_file():
             logger.warning(
-                f'Не могу получить состояние! Файл "{self.file_path}" не существует!'
+                f'Не могу получить состояние! Файл "{self.file_path}" не существует!',
             )
             return {}
         try:

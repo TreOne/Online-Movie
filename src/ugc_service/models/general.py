@@ -19,4 +19,4 @@ class FastJsonModel(BaseModel):
 class Response(FastJsonModel):
     """Страница результатов с пагинацией."""
 
-    msg: Optional[str] = Field(title="Сообщение от сервера.", example="OK")
+    msg: Optional[str] = Field(title='Сообщение от сервера.', example='OK')

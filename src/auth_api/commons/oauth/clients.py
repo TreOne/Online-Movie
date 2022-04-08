@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from flask import request
 from rauth import OAuth2Service
@@ -20,7 +20,7 @@ class OAuthClient:
         self.authorize_url = credentials.authorize_url
         self.base_url = credentials.base_url
 
-    def get_data_for_authorize(self) -> Dict:
+    def get_data_for_authorize(self) -> dict:
         data_for_authorize = {
             'compiled_url': self.service.get_authorize_url(
                 response_type='token',
@@ -53,7 +53,7 @@ class OAuthClient:
 
 class YandexOAuthClient(OAuthClient):
     def __init__(self, provider_name: str):
-        super(YandexOAuthClient, self).__init__('yandex')
+        super().__init__('yandex')
         self.service = OAuth2Service(
             name='yandex',
             client_id=self.consumer_id,
@@ -62,7 +62,7 @@ class YandexOAuthClient(OAuthClient):
             base_url=self.base_url,
         )
 
-    def get_user_info(self) -> Optional[Dict]:
+    def get_user_info(self) -> Optional[dict]:
         access_token = request.json.get('access_token')
         if not access_token:
             return None
@@ -77,7 +77,7 @@ class YandexOAuthClient(OAuthClient):
 
 class GoogleOAuthClient(OAuthClient):
     def __init__(self, provider_name: str):
-        super(GoogleOAuthClient, self).__init__('google')
+        super().__init__('google')
         self.service = OAuth2Service(
             name='google',
             client_id=self.consumer_id,
@@ -86,7 +86,7 @@ class GoogleOAuthClient(OAuthClient):
             base_url=self.base_url,
         )
 
-    def get_user_info(self) -> Optional[Dict]:
+    def get_user_info(self) -> Optional[dict]:
         access_token = request.json.get('access_token')
         if not access_token:
             return None
@@ -100,7 +100,7 @@ class GoogleOAuthClient(OAuthClient):
 
 class VkOAuthClient(OAuthClient):
     def __init__(self, provider_name: str):
-        super(VkOAuthClient, self).__init__('vk')
+        super().__init__('vk')
         self.service = OAuth2Service(
             name='vk',
             client_id=self.consumer_id,
@@ -109,7 +109,7 @@ class VkOAuthClient(OAuthClient):
             base_url=self.base_url,
         )
 
-    def get_user_info(self) -> Optional[Dict]:
+    def get_user_info(self) -> Optional[dict]:
         access_token = request.json.get('access_token')
         if not access_token:
             return None

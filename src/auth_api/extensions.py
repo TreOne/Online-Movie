@@ -14,13 +14,13 @@ settings = Settings()
 db = SQLAlchemy()
 jwt = JWTManager()
 blocked_access_tokens = redis.Redis(
-    host=settings.redis.host, port=settings.redis.port, db=1, decode_responses=True
+    host=settings.redis.host, port=settings.redis.port, db=1, decode_responses=True,
 )
 active_refresh_tokens = redis.Redis(
-    host=settings.redis.host, port=settings.redis.port, db=2, decode_responses=True
+    host=settings.redis.host, port=settings.redis.port, db=2, decode_responses=True,
 )
 rate_limiter_db = redis.Redis(
-    host=settings.redis.host, port=settings.redis.port, db=3, decode_responses=True
+    host=settings.redis.host, port=settings.redis.port, db=3, decode_responses=True,
 )
 ma = Marshmallow()
 migrate = Migrate()
@@ -31,7 +31,7 @@ pwd_context = CryptContext(schemes=['pbkdf2_sha256'])
 def setup_jaeger():
     config = Config(
         config={
-            'sampler': {'type': 'const', 'param': 1,},
+            'sampler': {'type': 'const', 'param': 1},
             'local_agent': {
                 'reporting_host': settings.jaeger.host,
                 'reporting_port': settings.jaeger.port,

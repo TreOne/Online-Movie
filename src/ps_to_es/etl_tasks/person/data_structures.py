@@ -20,10 +20,10 @@ class Person:
     birth_date: datetime.date
     updated_at: datetime.datetime
 
-    film_works: List[PersonFilmWork]
+    film_works: list[PersonFilmWork]
 
     @staticmethod
-    def create_from_sql_data(data: Dict) -> 'Person':
+    def create_from_sql_data(data: dict) -> 'Person':
         film_works = [
             PersonFilmWork(*film_work.split('<separator>'))
             for film_work in data['film_works']

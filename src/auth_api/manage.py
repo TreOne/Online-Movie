@@ -35,7 +35,7 @@ def createsuperuser(username, email, password):
     )
 
     existing_superuser = User.query.filter(
-        or_(User.username == new_superuser.username, User.email == new_superuser.email)
+        or_(User.username == new_superuser.username, User.email == new_superuser.email),
     ).first()
 
     if existing_superuser:
