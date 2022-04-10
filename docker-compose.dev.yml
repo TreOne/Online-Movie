@@ -213,6 +213,7 @@ services:
       dockerfile: deploy/kafka_to_clickhouse/Dockerfile
     volumes:
       - ./src/kafka_to_clickhouse:/home/app/etl
+      - ./log/kf_to_ch:/var/log/app
     depends_on:
       - clickhouse
       - kafka

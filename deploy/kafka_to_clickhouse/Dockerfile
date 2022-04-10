@@ -35,7 +35,9 @@ RUN adduser --system --group app
 # Создаем необходимые директории
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/etl
+ENV APP_LOGS=/var/log/app
 RUN mkdir $APP_HOME
+RUN mkdir $APP_LOGS
 WORKDIR $APP_HOME
 
 # Устанавливаем зависимости
@@ -48,6 +50,7 @@ COPY /src/kafka_to_clickhouse $APP_HOME
 
 # Изменяем владельца файлов на app
 RUN chown -R app:app $APP_HOME
+RUN chown -R app:app $APP_LOGS
 
 # Переключаемся на пользователя app
 USER app
