@@ -160,29 +160,32 @@ services:
     networks:
       - movie_network
 
-  kafka:
-    image: bitnami/kafka:3.1
-    expose:
-      - 9092
+  zookeeper-kafka:
+    image: confluentinc/cp-zookeeper:6.2.0
+    container_name: zookeeper-kafka
     environment:
-      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
-    depends_on:
-      - zookeeper
-    volumes:
-      - kafka_data:/bitnami
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    expose:
+      - 2181
     networks:
       - movie_network
 
-  zookeeper:
-    image: bitnami/zookeeper:3.8
+  kafka:
+    image: confluentinc/cp-kafka:6.2.0
     expose:
-      - 2181
+      - 9092
+    ports:
+      - "9093:9093"
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    volumes:
-      - zookeeper_data:/bitnami
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-kafka:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper-kafka
     networks:
       - movie_network
 
