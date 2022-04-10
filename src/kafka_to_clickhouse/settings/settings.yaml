@@ -1,6 +1,7 @@
 kafka:
   bootstrap_servers: kafka:9092
   auto_offset_reset: earliest
+  enable_auto_commit: false
   group_id: etl_service
 
 clickhouse:

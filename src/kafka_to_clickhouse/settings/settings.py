@@ -9,6 +9,7 @@ from pydantic import BaseModel, BaseSettings, FilePath
 class KafkaSettings(BaseModel):
     bootstrap_servers: str
     auto_offset_reset: str
+    enable_auto_commit: str
     group_id: str
 
 
