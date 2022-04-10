@@ -162,7 +162,6 @@ services:
 
   zookeeper-kafka:
     image: confluentinc/cp-zookeeper:6.2.0
-    container_name: zookeeper-kafka
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -185,10 +184,9 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,HOST://0.0.0.0:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,HOST://localhost:9093
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper-kafka
-    volumes:
-      - kafka_data:/var/lib/kafka/data
     networks:
       - movie_network
 
@@ -245,23 +243,11 @@ services:
     networks:
       - movie_network
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: "kafka:29092"
-    depends_on:
-      - kafka
-    networks:
-      - movie_network
-
 volumes:
   postgres_data:
   auth_postgres_data:
   elasticsearch_data:
   zookeeper_data:
-  kafka_data:
   clickhouse_data:
   static_volume:
   media_volume:

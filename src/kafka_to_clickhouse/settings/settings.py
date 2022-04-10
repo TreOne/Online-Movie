@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Type
+from typing import Any, List, Type
 
 import yaml
 from etl_tasks.abc_data_structure import TransferClass
@@ -18,7 +18,7 @@ class ClickHouseSettings(BaseModel):
 
 
 class KafkaTaskSettings(BaseModel):
-    topics: list[str]
+    topics: List[str]
 
 
 class ClickHouseTaskSettings(BaseModel):
@@ -38,6 +38,7 @@ class TaskSettings(BaseModel):
 
 
 class Settings(BaseSettings):
+    cycles_delay: int
     kafka: KafkaSettings
     clickhouse: ClickHouseSettings
     tasks: list[TaskSettings]
