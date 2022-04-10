@@ -1,6 +1,5 @@
 from typing import Type
 
-from apscheduler.schedulers.blocking import BlockingScheduler
 from clickhouse_driver import Client
 from clickhouse_driver.errors import ServerException
 from confluent_kafka import Consumer
@@ -13,11 +12,10 @@ from utils import get_logger
 
 
 logger = get_logger('main')
-my_scheduler = BlockingScheduler()
 
 
-@my_scheduler.scheduled_job('interval', minutes=1)
 def etl_process():
+    logger.debug('Инициализация')
     settings = Settings()
     clickhouse: Client = get_client(settings.clickhouse)
     kafka: Consumer = get_consumer(settings.kafka)
@@ -58,4 +56,4 @@ def etl_process():
 
 
 if __name__ == '__main__':
-    my_scheduler.start()
+    etl_process()

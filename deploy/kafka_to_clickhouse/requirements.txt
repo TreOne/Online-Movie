@@ -4,4 +4,3 @@ pyaml-env
 orjson~=3.6.6
 confluent-kafka==1.8.2
 clickhouse-driver==0.2.3
-APScheduler==3.9.1
