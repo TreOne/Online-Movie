@@ -5,10 +5,12 @@
 ```shell
 docker-compose -f docker-compose.dev.yml up --detach --build
 ```
-После запуска контейнер `admin_panel` дождется полной инициализации контейнера `db` с базой данных.
-Затем применит необходимые миграции, создаст супер пользователя и зальет демо данные для проекта из файла фикстур.
-Через некоторое время ETL-контейнер `ps_to_es` начнет перекачку данных из `db` в `elastic`.
-Проверить данные лучше всего на ендпоинте `http://localhost/api/v1/films/search/?query=Captain`,
+
+**После запуска контейнер:**
+* `admin_panel` дождется полной инициализации контейнера `db` с базой данных.
+* затем применит необходимые миграции, создаст супер пользователя и зальет демо данные для проекта из файла фикстур.
+* через некоторое время ETL-контейнер `ps_to_es` начнет перекачку данных из `db` в `elastic`.
+* проверить данные лучше всего на endpoint `http://localhost/api/v1/films/search/?query=Captain`,
 так как его ответы не кешируются.
 
 ☟ смотри секцию "Что потыкать?" ☟
@@ -23,6 +25,7 @@ cp deploy/ps_to_es/example.env deploy/ps_to_es/.env
 cp deploy/api/example.env deploy/api/.env
 cp deploy/auth/example.env deploy/auth/.env
 ```
+
 ### Установка
 ```shell
 docker-compose -f docker-compose.yml down -v
@@ -34,11 +37,12 @@ docker-compose -f docker-compose.yml exec admin_panel python manage.py migrate
 docker-compose -f docker-compose.yml exec admin_panel python manage.py createsuperuser --noinput
 docker-compose -f docker-compose.yml exec admin_panel python manage.py loaddata /home/app/fixtures.json.gz
 ```
+
 ## Что потыкать?
 ### Django:
-Простенький рест на джанге с первого спринта:
+Простенький REST на Django с первого спринта:
  - http://localhost/django_api/v1/movies/01ab9e34-4ceb-4337-bb69-68a1b0de46b2
-Админка джанги (логин: `admin`, пароль: `password`)
+Админка Django (логин: `admin`, пароль: `password`)
  - http://localhost/admin
 ### Kibana:
  - http://localhost/kibana
@@ -66,4 +70,12 @@ curl -X GET --location "http://localhost/django_api/v1/movies/01ab9e34-4ceb-4337
   "description": "A biography of Axl Rose.",
   ...
 }
+```
+
+## Разработка
+
+Для разработки потребуется установить [pre-commit](https://pre-commit.com/) хуки, для проверки качества кода
+```shell
+pip install pre-commit
+pre-commit install
 ```
