@@ -18,13 +18,13 @@ class WatcherService:
         self, movie_id: UUID, client_id: UUID, view_ts: int,
     ) -> None:
         """Регистрирует сообщение о прогрессе просмотра фильма."""
-        message = {
-            'movie_id': str(movie_id),
-            'client_id': str(client_id),
+        message = orjson.dumps({
+            'movie_id': movie_id,
+            'client_id': client_id,
             'view_ts': view_ts,
-        }
+        })
         await self.oltp_engine.send(
-            topic=config.KAFKA_TOPIC, message=orjson.dumps(message),
+            topic=config.KAFKA_TOPIC, message=message,
         )
 
 
