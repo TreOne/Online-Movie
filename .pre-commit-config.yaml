@@ -8,6 +8,14 @@ repos:
 #    -   id: check-yaml  # проверяет синтаксис .yaml файлов
     -   id: double-quote-string-fixer  # заменяет " на '
 
+# Отсортировывает импорты в проекте
+-   repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        skip: __init__.py
+        args: [ --profile, black, --filter-files ]
+
 # Добавляет пропущенные запятые
 -   repo: https://github.com/asottile/add-trailing-comma
     rev: v2.2.2

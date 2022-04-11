@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 from aiokafka import AIOKafkaProducer
-
 from db.kafka import kafka_reconnect
 from engines.oltp.general import OLTPEngine
 from fastapi import HTTPException

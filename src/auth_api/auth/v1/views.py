@@ -1,7 +1,9 @@
 from http.client import BAD_REQUEST, CONFLICT, CREATED, FORBIDDEN
 
 import pyotp
-from flask import Blueprint, current_app as app, jsonify, request
+from flask import Blueprint
+from flask import current_app as app
+from flask import jsonify, request
 from flask_jwt_extended import get_jwt, jwt_required
 from marshmallow import ValidationError
 from sqlalchemy import or_

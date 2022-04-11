@@ -1,6 +1,6 @@
 import opentracing
-from opentracing.ext import tags
 from flask import _request_ctx_stack as stack
+from opentracing.ext import tags
 
 
 class FlaskTracing(opentracing.Tracer):

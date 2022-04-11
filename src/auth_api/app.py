@@ -3,12 +3,12 @@ from http.client import TOO_MANY_REQUESTS
 from flask import Flask, jsonify, request
 
 from auth_api import manage
-from auth_api.auth.v1.views import blueprint as auth_blueprint
-from auth_api.oauth.v1.views import blueprint as oauth_blueprint
 from auth_api.api.v1.views import blueprint as api_blueprint
+from auth_api.auth.v1.views import blueprint as auth_blueprint
 from auth_api.commons.fast_json import ORJSONDecoder, ORJSONEncoder
 from auth_api.commons.utils import is_rate_limit_exceeded
 from auth_api.extensions import apispec, db, jwt, migrate, settings, tracing
+from auth_api.oauth.v1.views import blueprint as oauth_blueprint
 from auth_api.settings.settings import Settings
 
 

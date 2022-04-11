@@ -1,10 +1,9 @@
 from http import HTTPStatus
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
-
 from core import endpoints_params as ep_params
 from core.config import NOT_FOUND_MESSAGE
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from models.film import Film, FilmBrief, FilmFilterType, FilmSortingType
 from models.general import Page
 from services.film import FilmService

@@ -1,8 +1,7 @@
 from typing import Optional
 
-from pydantic import Field
-
 from models.general import FastJsonModel
+from pydantic import Field
 
 
 class GenreBrief(FastJsonModel):

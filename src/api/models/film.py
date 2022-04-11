@@ -1,11 +1,10 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import Field
-
 from models.general import FastJsonModel
 from models.genre import GenreBrief
 from models.person import PersonBrief
+from pydantic import Field
 
 
 class FilmFilterType(str, Enum):

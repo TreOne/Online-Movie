@@ -1,8 +1,7 @@
 import uuid
 
-from fastapi import APIRouter, Body, Depends, Request
-
 from core import endpoints_params as ep_params
+from fastapi import APIRouter, Body, Depends, Request
 from models.general import Response
 from services.watcher import WatcherService, get_watcher_service
 

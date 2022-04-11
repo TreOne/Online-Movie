@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from movies.models import FilmWork, FilmWorkGenre, FilmWorkPerson, Genre, Person
 
 

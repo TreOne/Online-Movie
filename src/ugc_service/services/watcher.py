@@ -3,11 +3,11 @@ from uuid import UUID
 
 import orjson
 from aiokafka import AIOKafkaProducer
+from core import config
 from db.kafka import get_kafka_producer
 from engines.oltp.general import OLTPEngine
 from engines.oltp.kafka import KafkaOLTPEngine
 from fastapi import Depends
-from core import config
 
 
 class WatcherService:

@@ -3,7 +3,6 @@ from typing import Optional
 from elasticsearch import AsyncElasticsearch, NotFoundError
 from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import MultiMatch, Nested, Term
-
 from engines.search.general import SearchEngine, SearchParams, SearchResult
 
 

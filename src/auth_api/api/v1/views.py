@@ -6,14 +6,13 @@ from flask_jwt_extended import get_jwt, jwt_required
 from flask_restful import Api
 from marshmallow import ValidationError
 
-from auth_api.api.v1.resources.user import UserList, UserResource
 from auth_api.api.v1.resources.role import RoleList, RoleResource
-from auth_api.api.v1.resources.user import MeResource
+from auth_api.api.v1.resources.user import MeResource, UserList, UserResource
 from auth_api.api.v1.schemas.auth_history import AuthHistorySchema
 from auth_api.api.v1.schemas.role import RoleSchema
 from auth_api.api.v1.schemas.totp_request import TOTPRequestSchema
 from auth_api.api.v1.schemas.user import UserSchema
-from auth_api.commons.jwt_utils import user_has_role, get_user_uuid_from_token
+from auth_api.commons.jwt_utils import get_user_uuid_from_token, user_has_role
 from auth_api.commons.pagination import paginate
 from auth_api.extensions import apispec, db
 from auth_api.models.user import AuthHistory, Role, User

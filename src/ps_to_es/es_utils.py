@@ -3,7 +3,6 @@ import json
 import backoff
 import elasticsearch
 from elasticsearch import Elasticsearch, helpers
-
 from log_utils import get_logger
 from settings.settings import get_settings
 

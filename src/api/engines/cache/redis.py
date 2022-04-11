@@ -4,9 +4,7 @@ from datetime import timedelta
 from typing import Any
 
 from aioredis import Redis
-
 from engines.cache.general import CacheEngine
-
 
 logger = logging.getLogger(__name__)
 

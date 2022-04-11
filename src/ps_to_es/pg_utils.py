@@ -4,10 +4,9 @@ from typing import Iterator, Type, TypeVar
 
 import backoff
 import psycopg2
+from log_utils import get_logger
 from psycopg2.extensions import connection as pg_connection
 from psycopg2.extras import RealDictCursor
-
-from log_utils import get_logger
 from settings.settings import get_settings
 
 settings = get_settings()

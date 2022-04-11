@@ -5,7 +5,6 @@ from typing import List, Type
 from clickhouse_driver import Client
 from clickhouse_driver.errors import ServerException
 from confluent_kafka import Consumer, Message
-
 from engines.click_house import create_table, get_client, table_is_exist
 from engines.kafka import get_consumer
 from etl_tasks.abc_data_structure import TransferClass

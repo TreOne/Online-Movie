@@ -4,7 +4,6 @@ from typing import Optional
 import aioredis.errors
 import backoff
 from aioredis import Redis
-
 from core import config
 from core.utils import backoff_hdlr
 

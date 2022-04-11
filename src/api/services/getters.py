@@ -1,14 +1,13 @@
 from functools import lru_cache
 
 from aioredis import Redis
-from elasticsearch import AsyncElasticsearch
-from fastapi import Depends
-
 from core import config
 from db.elastic import get_elastic
 from db.redis import get_redis
+from elasticsearch import AsyncElasticsearch
 from engines.cache.redis import RedisCacheEngine
 from engines.search.elastic import ElasticSearchEngine
+from fastapi import Depends
 from services.film import FilmService
 from services.genre import GenreService
 from services.person import PersonService

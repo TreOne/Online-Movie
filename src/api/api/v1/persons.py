@@ -1,10 +1,9 @@
 from http import HTTPStatus
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-
 from core import endpoints_params as ep_params
 from core.config import NOT_FOUND_MESSAGE
+from fastapi import APIRouter, Depends, HTTPException, Query
 from models.general import Page
 from models.person import Person, PersonBrief
 from services.getters import get_person_service

@@ -2,10 +2,9 @@ import logging
 from typing import Optional
 
 import backoff
-from elasticsearch import AsyncElasticsearch
-
 from core import config
 from core.utils import backoff_hdlr
+from elasticsearch import AsyncElasticsearch
 
 logger = logging.getLogger(__name__)
 es: Optional[AsyncElasticsearch] = None

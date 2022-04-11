@@ -1,7 +1,9 @@
 import uuid
 from http.client import BAD_REQUEST, FORBIDDEN, NOT_FOUND
 
-from flask import Blueprint, current_app as app, jsonify, request
+from flask import Blueprint
+from flask import current_app as app
+from flask import jsonify, request
 from marshmallow import ValidationError
 
 from auth_api.commons.jwt_utils import create_tokens

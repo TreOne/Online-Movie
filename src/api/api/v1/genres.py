@@ -1,9 +1,8 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-
 from core import endpoints_params as ep_params
 from core.config import NOT_FOUND_MESSAGE
+from fastapi import APIRouter, Depends, HTTPException, Query
 from models.general import Page
 from models.genre import Genre, GenreBrief
 from services.genre import GenreService

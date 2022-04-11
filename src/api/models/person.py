@@ -2,9 +2,8 @@ import datetime
 from enum import Enum
 from typing import Optional
 
-from pydantic import Field
-
 from models.general import FastJsonModel
+from pydantic import Field
 
 
 class PersonRoleType(str, Enum):
