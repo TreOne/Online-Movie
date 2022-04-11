@@ -20,7 +20,7 @@ class KafkaOLTPEngine(OLTPEngine):
         try:
             await self.kafka_producer.send_and_wait(topic=topic, value=message)
         except KafkaError:
-            await kafka_reconnect()  # TODO: Превратить это в бэкграунд задачу так как время реконекта может быть долгим.
+            await kafka_reconnect()
             raise HTTPException(
                 status_code=HTTPStatus.GATEWAY_TIMEOUT,
                 detail='The database is not responding.',
