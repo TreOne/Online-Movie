@@ -51,7 +51,7 @@ def etl_process():
                     kafka.commit(last_kafka_message)
                     logger.info(f'Successfully added {len(query_tuples)} new messages to ClickHouse')
                 except ServerException as e:
-                    logger.error(f'ClickHouse error: {e}')
+                    logger.exception(f'ClickHouse error: {e}')
             else:
                 logger.debug('No new messages.')
 
