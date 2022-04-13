@@ -6,18 +6,15 @@ from etl_tasks.abc_data_structure import TransferClass
 from pydantic import BaseModel, BaseSettings, FilePath
 
 
-class KafkaSettings(BaseModel):
-    bootstrap_servers: str
-    auto_offset_reset: str
-    enable_auto_commit: str
-    group_id: str
-
-
 class ClickHouseSettings(BaseModel):
     host: str
 
 
 class KafkaTaskSettings(BaseModel):
+    bootstrap_servers: str
+    auto_offset_reset: str
+    enable_auto_commit: str
+    group_id: str
     topics: List[str]
 
 
@@ -39,7 +36,6 @@ class TaskSettings(BaseModel):
 
 class Settings(BaseSettings):
     cycles_delay: int
-    kafka: KafkaSettings
     clickhouse: ClickHouseSettings
     tasks: list[TaskSettings]
 

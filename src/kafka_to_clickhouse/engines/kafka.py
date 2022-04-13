@@ -1,8 +1,8 @@
 from confluent_kafka import Consumer
-from settings.settings import KafkaSettings
+from settings.settings import KafkaTaskSettings
 
 
-def get_consumer(settings: KafkaSettings) -> Consumer:
+def get_consumer(settings: KafkaTaskSettings) -> Consumer:
     consumer = Consumer({
         'bootstrap.servers': settings.bootstrap_servers,
         'group.id': settings.group_id,

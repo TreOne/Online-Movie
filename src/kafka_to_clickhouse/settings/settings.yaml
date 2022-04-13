@@ -1,11 +1,5 @@
 cycles_delay: 60
 
-kafka:
-  bootstrap_servers: kafka:9092
-  auto_offset_reset: earliest
-  enable_auto_commit: false
-  group_id: etl_service
-
 clickhouse:
   host: clickhouse
   port: 8123
@@ -15,6 +9,10 @@ tasks:
     num_messages: 100000
     data_class: !!python/name:etl_tasks.movie_watch.data_structures.MovieWatch
     kafka:
+      bootstrap_servers: kafka:9092
+      auto_offset_reset: earliest
+      enable_auto_commit: false
+      group_id: etl_service
       topics:
         - movie_watches
     clickhouse:

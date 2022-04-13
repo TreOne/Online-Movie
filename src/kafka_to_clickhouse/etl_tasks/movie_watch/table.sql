@@ -5,6 +5,6 @@ CREATE TABLE movie_watches
     ViewDate Date,
     ViewTimestamp UInt16
 )
-ENGINE = MergeTree()
+ENGINE = ReplacingMergeTree()
 ORDER BY (MovieID, UserID)
 PARTITION BY toYYYYMM(ViewDate);
