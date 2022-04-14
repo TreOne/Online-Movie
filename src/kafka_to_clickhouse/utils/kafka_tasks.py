@@ -8,7 +8,7 @@ from etl_tasks.abc_data_structure import TransferClass
 from settings.settings import ClickHouseTaskSettings, Settings
 from utils import get_logger
 
-logger = get_logger('main')
+logger = get_logger(__name__)
 
 
 def check_clickhouse_table(
