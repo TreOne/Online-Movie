@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: test_database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  cassandra:
+    image: cassandra:latest
+    ports:
+      - "9042:9042"
+
+volumes:
+  clickhouse_data:
+  postgres_data:
+  cassandra_data:
