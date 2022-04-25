@@ -70,24 +70,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: html
           message: |
-            <table>
-              <tr>
-                <td> colspan="2"<b>${{ github.workflow }}</b></td>
-              </tr>
-              <tr>
-                <td><b>Репозиторий</b></td>
-                <td><a href="https://github.com/${{github.repository}}">${{github.repository}}</a></td>
-              </tr>
-              <tr>
-                <td><b>Событие</b></td>
-                <td>${{ github.event_name }}</td>
-              </tr>
-              <tr>
-                <td><b>Статус</b></td>
-                <td>${{ needs.build.result }}</td>
-              </tr>
-              <tr>
-                <td><b>Детали</b></td>
-                <td><a href="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}">Просмотреть</a></td>
-              </tr>
-            </table>
+            <b>${{ github.workflow }}</b>
+            <b>Репозиторий:</b> <a href="https://github.com/${{github.repository}}">${{github.repository}}</a>
+            <b>Статус:</b> ${{ needs.build.result }}
+            <b>Детали:</b> <a href="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}">Просмотреть</a>
