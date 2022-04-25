@@ -1,0 +1,93 @@
+name: UGC-Service - Code verifying
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - deploy/ugc_service/**
+      - src/ugc_service/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - deploy/ugc_service/**
+      - src/ugc_service/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create directories
+        run: |
+          mkdir -p reports/ugc_service/styleguide/
+          mkdir -p reports/ugc_service/mypy/
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install  wemake-python-styleguide flake8-html mypy lxml
+        working-directory: deploy/ugc_service
+
+      - name: Style checking
+        run: |
+          flake8 src/ugc_service --max-line-length 120 --exit-zero --format=html --htmldir=reports/ugc_service/styleguide/
+
+      - name: Type checking
+        run: |
+          mypy --html-report reports/ugc_service/mypy/ src/ugc_service/* || true
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: UGC-Service-reports
+          path: reports/
+
+  notify:
+    runs-on: ubuntu-latest
+    if: cancelled() == false
+    needs: build
+    steps:
+      - name: Send Telegram notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: html
+          message: |
+            <table>
+              <tr>
+                <td> colspan="2"<b>${{ github.workflow }}</b></td>
+              </tr>
+              <tr>
+                <td><b>Репозиторий</b></td>
+                <td><a href="https://github.com/${{github.repository}}">${{github.repository}}</a></td>
+              </tr>
+              <tr>
+                <td><b>Событие</b></td>
+                <td>${{ github.event_name }}</td>
+              </tr>
+              <tr>
+                <td><b>Статус</b></td>
+                <td>${{ needs.build.result }}</td>
+              </tr>
+              <tr>
+                <td><b>Детали</b></td>
+                <td><a href="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}">Просмотреть</a></td>
+              </tr>
+            </table>
