@@ -1,4 +1,10 @@
-[![UGC-Service - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ugc-service.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ugc-service.yml)
+[![AdminPanel - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/admin-panel.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/admin-panel.yml)  
+[![MovieAPI - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/movie_api.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/movie_api.yml)  
+[![AuthAPI - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/auth-api.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/auth-api.yml)  
+[![UGC-Service - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ugc-service.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ugc-service.yml)  
+[![ETL-PosgresToElastic - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ps_to_es.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ps_to_es.yml)  
+[![ETL-KafkaToClickhouse - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/kafka_to_clickhouse.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/kafka_to_clickhouse.yml)  
+  
 
 # Онлайн кинотеатр
 Демо проект для **Яндекс.Практикум**.
