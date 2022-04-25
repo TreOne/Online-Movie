@@ -1,18 +1,18 @@
-name: UGC-Service - Code verifying
+name: ETL-KafkaToClickhouse - Code verifying
 
 on:
   push:
     branches:
       - master
     paths:
-      - deploy/ugc_service/**
-      - src/ugc_service/**
+      - deploy/kafka_to_clickhouse/**
+      - src/kafka_to_clickhouse/**
   pull_request:
     branches:
       - master
     paths:
-      - deploy/ugc_service/**
-      - src/ugc_service/**
+      - deploy/kafka_to_clickhouse/**
+      - src/kafka_to_clickhouse/**
 
 jobs:
   build:
@@ -34,23 +34,23 @@ jobs:
 
       - name: Create directories
         run: |
-          mkdir -p reports/ugc_service/styleguide/
-          mkdir -p reports/ugc_service/mypy/
+          mkdir -p reports/kafka_to_clickhouse/styleguide/
+          mkdir -p reports/kafka_to_clickhouse/mypy/
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install  wemake-python-styleguide flake8-html mypy lxml
-        working-directory: deploy/ugc_service
+        working-directory: deploy/kafka_to_clickhouse
 
       - name: Style checking
         run: |
-          flake8 src/ugc_service --max-line-length 120 --exit-zero --format=html --htmldir=reports/ugc_service/styleguide/
+          flake8 src/kafka_to_clickhouse --max-line-length 120 --exit-zero --format=html --htmldir=reports/kafka_to_clickhouse/styleguide/
 
       - name: Type checking
         run: |
-          mypy --html-report reports/ugc_service/mypy/ src/ugc_service/* || true
+          mypy --html-report reports/kafka_to_clickhouse/mypy/ src/kafka_to_clickhouse/* || true
 
       - name: Upload reports
         uses: actions/upload-artifact@v3

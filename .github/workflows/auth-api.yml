@@ -55,7 +55,7 @@ jobs:
       - name: Upload reports
         uses: actions/upload-artifact@v3
         with:
-          name: UGC-Service-reports
+          name: code-verify-reports
           path: reports/
 
   notify:

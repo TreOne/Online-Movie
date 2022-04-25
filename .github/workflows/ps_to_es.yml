@@ -1,18 +1,18 @@
-name: UGC-Service - Code verifying
+name: ETL-PosgresToElastic - Code verifying
 
 on:
   push:
     branches:
       - master
     paths:
-      - deploy/ugc_service/**
-      - src/ugc_service/**
+      - deploy/ps_to_es/**
+      - src/ps_to_es/**
   pull_request:
     branches:
       - master
     paths:
-      - deploy/ugc_service/**
-      - src/ugc_service/**
+      - deploy/ps_to_es/**
+      - src/ps_to_es/**
 
 jobs:
   build:
@@ -34,23 +34,23 @@ jobs:
 
       - name: Create directories
         run: |
-          mkdir -p reports/ugc_service/styleguide/
-          mkdir -p reports/ugc_service/mypy/
+          mkdir -p reports/ps_to_es/styleguide/
+          mkdir -p reports/ps_to_es/mypy/
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install  wemake-python-styleguide flake8-html mypy lxml
-        working-directory: deploy/ugc_service
+        working-directory: deploy/ps_to_es
 
       - name: Style checking
         run: |
-          flake8 src/ugc_service --max-line-length 120 --exit-zero --format=html --htmldir=reports/ugc_service/styleguide/
+          flake8 src/ps_to_es --max-line-length 120 --exit-zero --format=html --htmldir=reports/ps_to_es/styleguide/
 
       - name: Type checking
         run: |
-          mypy --html-report reports/ugc_service/mypy/ src/ugc_service/* || true
+          mypy --html-report reports/ps_to_es/mypy/ src/ps_to_es/* || true
 
       - name: Upload reports
         uses: actions/upload-artifact@v3
