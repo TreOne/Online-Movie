@@ -12,7 +12,7 @@ services:
     depends_on:
       - admin_panel
       - api
-      - auth
+      - auth_api
       - ugc_service
     networks:
       - movie_network
@@ -56,12 +56,12 @@ services:
     networks:
       - movie_network
 
-  auth:
+  auth_api:
     build:
       context: .
-      dockerfile: deploy/auth/dev.Dockerfile
+      dockerfile: deploy/auth_api/dev.Dockerfile
     env_file:
-      - deploy/auth/example.env
+      - deploy/auth_api/example.env
     expose:
       - 5000
     volumes:
@@ -78,7 +78,7 @@ services:
     volumes:
       - auth_postgres_data:/var/lib/postgresql/data/
     env_file:
-      - deploy/auth/example.env
+      - deploy/auth_api/example.env
     expose:
       - 5432
     ports:

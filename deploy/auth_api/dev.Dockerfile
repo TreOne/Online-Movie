@@ -15,7 +15,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Копируем точку входа
-COPY /deploy/auth/entrypoint.dev.sh .
+COPY /deploy/auth_api/entrypoint.dev.sh .
 # Fix права на выполнение (для пользователей unix систем)
 RUN ["chmod", "+x", "entrypoint.dev.sh"]
 # Fix окончания строк (для пользователей win систем)
@@ -28,7 +28,7 @@ COPY /src/auth_api .
 RUN flake8 --ignore=W503,E501,F401,E231 .
 
 # Установка зависимостей
-COPY /deploy/auth/requirements.txt .
+COPY /deploy/auth_api/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 
@@ -67,19 +67,3 @@ USER app
 
 # Запускаем точку входа
 ENTRYPOINT ["/home/app/entrypoint.dev.sh"]
-
-
-#
-#
-#
-#FROM python:3.9.10-bullseye
-#
-#WORKDIR /app
-#
-#RUN pip install --upgrade pip
-#COPY /deploy/auth/requirements.txt ./
-#RUN pip install -r requirements.txt
-#
-#COPY /src/auth_api/ auth_api/
-#
-#EXPOSE 5000
