@@ -1,3 +1,5 @@
+[![UGC-Service - Code verifying](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ugc-service.yml/badge.svg)](https://github.com/TreOne/ugc_sprint_1/actions/workflows/ugc-service.yml)
+
 # Онлайн кинотеатр
 Демо проект для **Яндекс.Практикум**.
 

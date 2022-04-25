@@ -3,13 +3,13 @@ name: UGC-Service - Code verifying
 on:
   push:
     branches:
-      - feature/github-actions
+      - master
     paths:
       - deploy/ugc_service/**
       - src/ugc_service/**
   pull_request:
     branches:
-      - feature/github-actions
+      - master
     paths:
       - deploy/ugc_service/**
       - src/ugc_service/**
