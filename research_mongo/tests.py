@@ -9,33 +9,29 @@ from research_mongo.generate_data import (
     get_random_date,
     generate_review_scores,
 )
-from research_mongo.init_db import USER_BOOKMARKS, MOVIE_SCORES, MOVIES, REVIEWS, REVIEW_SCORES
-from research_mongo.init_db import db
+from research_mongo.init_db import MongoDB
 from research_mongo.config import BENCHMARK_ITERATIONS
 
-USER_ID = get_random_field(db, "user_bookmarks")
-MOVIE_ID = get_random_field(db, "movie_scores", "movie_id")
-# MOVIE_ID = "3c66a837-1058-4b1d-94ff-84767afd7584"
-REVIEW_ID = get_random_field(db, "reviews")
+mongo_db = MongoDB.mongo_db
+USER_BOOKMARKS = MongoDB.USER_BOOKMARKS
+MOVIE_SCORES = MongoDB.MOVIE_SCORES
+MOVIES = MongoDB.MOVIES
+REVIEWS = MongoDB.REVIEWS
+REVIEW_SCORES = MongoDB.REVIEW_SCORES
+
+USER_ID = get_random_field(mongo_db, "user_bookmarks")
+MOVIE_ID = get_random_field(mongo_db, "movie_scores", "movie_id")
+REVIEW_ID = get_random_field(mongo_db, "reviews")
+
 
 def check_add():
-#     movie_scores = [a for a in MOVIE_SCORES.find({})]
-#     movies = [b for b in MOVIES.find({})]
-#     reviews = [c for c in REVIEWS.find({})]
-#     review_scores = [d for d in REVIEW_SCORES.find({})]
-#     a = MOVIE_SCORES.find_one({"user_id": user_id})
-    MOVIE_ID = "3c66a837-1058-4b1d-94ff-84767afd7584"
-    b = MOVIES.find_one({"_id": MOVIE_ID})
-    a = 5
-#     bb = MOVIE_SCORES.find({"_id": {"$in": b.get("scores")}})
-#     bbb = list(bb)
-#     c = MOVIE_SCORES.find_one({"_id": b.get("scores")[0]})
-#     c = REVIEWS.find_one({"_id": review_id})
-#     a = REVIEW_SCORES.find_one({"review_id": REVIEW_ID})
-#     c = REVIEWS.find_one({"_id": REVIEW_ID})
+    movie_scores = [a for a in MOVIE_SCORES.find({})]
+    movies = [b for b in MOVIES.find({})]
+    reviews = [c for c in REVIEWS.find({})]
+    review_scores = [d for d in REVIEW_SCORES.find({})]
     return "test"
 
-# check_add()
+
 def check_count_in_tables():
     print("USER_BOOKMARKS - ", USER_BOOKMARKS.count_documents({}))
     print("MOVIE_SCORES - ", MOVIE_SCORES.count_documents({}))
@@ -50,6 +46,7 @@ def test_get_user_bookmarks():
     query = {"_id": user_id}
     user = USER_BOOKMARKS.find_one(query)
     return len(user.get("bookmarks"))
+
 
 # Список оценок пользователя
 @benchmark(BENCHMARK_ITERATIONS)
@@ -86,6 +83,7 @@ def test_get_popular_movies():
     movies = MOVIES.find().sort("rating", DESCENDING).limit(100)
     movies = [movie for movie in movies]
     return movies
+
 
 # Список популярных рецензий по фильму
 @benchmark(BENCHMARK_ITERATIONS)
@@ -152,6 +150,7 @@ def test_add_score_to_movie():
 
     print(f"Фильму - {movie_id} поставлена новая оценка от пользователя - {user_id}")
     return movie
+
 
 # Добавить рецензию к фильму, обновить рецензии у фильмов
 @benchmark(BENCHMARK_ITERATIONS)
@@ -241,69 +240,3 @@ write_tests = [
     test_add_review_to_movie,
     test_add_score_to_review,
 ]
-
-@benchmark(BENCHMARK_ITERATIONS)
-def test_get_list_movies_scores():
-    movies_for_user = MOVIE_SCORES.aggregate([{"$match": {"movie_id": MOVIE_ID}},
-                                              {"$group": {"_id": "$movie_id", "rating": {"$avg": "$score"},
-                                                          "scores_quantity": {"$count": {}}}}])
-    movies = [movie for movie in movies_for_user]
-    return movies
-
-
-@benchmark(BENCHMARK_ITERATIONS)
-def test_add(movie_id):
-    agg_movie_scores = MOVIE_SCORES.aggregate([{"$match": {"movie_id": movie_id}},
-                                              {"$group": {"_id": "$movie_id", "rating": {"$avg": "$score"},
-                                                          "scores_quantity": {"$count": {}}}}])
-
-    movies = list(agg_movie_scores)
-    MOVIES.update_one(
-        {"_id": movie_id},
-        {
-            "$set": {"rating": movies[0].get("rating"),
-                     "scores_quantity": movies[0].get("scores_quantity")},
-        },
-    )
-    b = MOVIES.find_one({"_id": movie_id})
-    print("movie - ", b)
-    return b
-
-
-# Добавить оценку фильму, обновить рейтинг фильма
-@benchmark(BENCHMARK_ITERATIONS)
-def test_add_score_to_movie1():
-    user_id = get_uuid()
-    score = generate_movie_scores(user_id, MOVIE_ID)
-    MOVIE_SCORES.insert_one(score)
-
-    agg_movie_scores = MOVIE_SCORES.aggregate([{"$match": {"movie_id": MOVIE_ID}},
-                                               {"$group": {"_id": "$movie_id", "rating": {"$avg": "$score"},
-                                                           "scores_quantity": {"$count": {}}}}])
-    movie = list(agg_movie_scores)
-    MOVIES.update_one(
-        {"_id": MOVIE_ID},
-        {
-            "$set": {"rating": movie[0].get("rating"),
-                     "scores_quantity": movie[0].get("scores_quantity")},
-        },
-    )
-    print(f"Фильму - {MOVIE_ID} поставлена новая оценка от пользователя - {user_id}")
-    return movie
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

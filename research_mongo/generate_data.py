@@ -14,9 +14,15 @@ from research_mongo.config import (
     MIN_RATING,
     MAX_RATING,
     SCORES_FOR_MOVIE,
-    REVIEWS_FOR_MOVIE
+    REVIEWS_FOR_MOVIE,
 )
-from research_mongo.init_db import USER_BOOKMARKS, MOVIE_SCORES, MOVIES, REVIEWS, REVIEW_SCORES
+from research_mongo.init_db import MongoDB
+
+USER_BOOKMARKS = MongoDB.USER_BOOKMARKS
+MOVIE_SCORES = MongoDB.MOVIE_SCORES
+MOVIES = MongoDB.MOVIES
+REVIEWS = MongoDB.REVIEWS
+REVIEW_SCORES = MongoDB.REVIEW_SCORES
 
 
 def get_uuid():
@@ -27,12 +33,14 @@ USER_IDS = [get_uuid() for _ in range(USERS_COUNT)]
 MOVIES_IDS = [get_uuid() for _ in range(MOVIES_COUNT)]
 
 
-def get_random_field(db, collection, name="_id"):
+def get_random_field(mongo_db, collection, name="_id"):
     try:
-        return [doc.get(name) for doc in
-                db.get_collection(collection)
-                    .aggregate([{"$sample": {"size": 50}}])
-                ]
+        return [
+            doc.get(name)
+            for doc in mongo_db.get_collection(collection).aggregate(
+                [{"$sample": {"size": 50}}]
+            )
+        ]
     except StopIteration:
         print("Коллекция пустая")
 
@@ -51,7 +59,9 @@ def generate_user_bookmarks():
     for user_id in USER_IDS:
         yield {
             "_id": user_id,
-            "bookmarks": [movie_id for movie_id in random.sample(MOVIES_IDS, BOOKMARKS_PER_USER)],
+            "bookmarks": [
+                movie_id for movie_id in random.sample(MOVIES_IDS, BOOKMARKS_PER_USER)
+            ],
         }
 
 
@@ -93,9 +103,7 @@ def generate_review_scores(review_id):
 def generate_review(user_id, movie_id, movies_score_id):
     review_id = get_uuid()
     scores_quantity = random.randint(1, MAX_REVIEW_SCORE)
-    scores = [
-        generate_review_scores(review_id) for _ in range(scores_quantity)
-    ]
+    scores = [generate_review_scores(review_id) for _ in range(scores_quantity)]
     scores_amount = sum([score.get("score") for score in scores])
     rating = int(scores_amount / scores_quantity)
     review = {
@@ -140,7 +148,9 @@ def upload_to_user_bookmarks():
 def upload_to_movies_and_reviews():
     for idx, movie_id in enumerate(MOVIES_IDS):
 
-        movie_scores, movie, reviews, review_scores = prepare_movie_and_reviews(movie_id)
+        movie_scores, movie, reviews, review_scores = prepare_movie_and_reviews(
+            movie_id
+        )
 
         MOVIE_SCORES.insert_many(movie_scores, ordered=False)
 
@@ -166,7 +176,7 @@ def benchmark(iteration):
                 iterations_time.append(finish)
             avg_time = sum(iterations_time) / iteration
 
-            print(f"Название теста - {func.__name__}", )
+            print(f"Название теста - {func.__name__}",)
             print(f"Количество итераций - {iteration}")
             print(f"Средняя продолжительность запроса - {avg_time:.4f} c\n")
 
@@ -179,20 +189,22 @@ def upload_to_user_bookmarks_postgres():
     print(f"Старт загрузки данных в таблицу закладок юзера")
     postgres_db = PostgresDB().postgres_db()
     user_bookmarks = []
-    for j in generate_user_bookmarks():
-        user_id, bookmarks = j.values()
+    quan_users = len(USER_IDS)
+    for idx, user in enumerate(generate_user_bookmarks()):
+        user_id, bookmarks = user.values()
         for bookmark in bookmarks:
             row = UserBookmarks(user_id=user_id, bookmarks=bookmark)
             user_bookmarks.append(row)
-            if len(user_bookmarks) == 100:
-                postgres_db.bulk_save_objects(user_bookmarks)
-                user_bookmarks.clear()
+        if len(user_bookmarks) % 100 == 0 or quan_users == idx + 1:
+            postgres_db.bulk_save_objects(user_bookmarks)
+            user_bookmarks.clear()
     print(f"Загрузка данных в таблицу закладок юзера завершена")
 
 
 def upload_to_movies_and_reviews_postgres():
     postgres_db = PostgresDB().postgres_db()
     movie_scores_for_bulk, movie_bulk, reviews_bulk, review_scores_bulk = [], [], [], []
+    quan_movies = len(MOVIES_IDS)
     for idx, movie_id in enumerate(MOVIES_IDS):
         movie_scores, movie, reviews, review_scores = prepare_movie_and_reviews(movie_id)
         movie.pop("scores")
@@ -208,7 +220,7 @@ def upload_to_movies_and_reviews_postgres():
         movie_bulk.append(movie_obj)
         reviews_bulk.extend(reviews_obj)
         review_scores_bulk.extend(review_scores_obj)
-        if idx % 20 == 0:
+        if idx % 20 == 0 or quan_movies == idx + 1:
             postgres_db.bulk_save_objects(movie_bulk)
             postgres_db.bulk_save_objects(movie_scores_for_bulk)
             postgres_db.bulk_save_objects(reviews_bulk)
