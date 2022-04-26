@@ -1,6 +1,6 @@
-from sqlalchemy import Column, INTEGER, DECIMAL, CHAR, DateTime, JSON, TEXT, BOOLEAN, BINARY
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, INTEGER, CHAR, DateTime, TEXT
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
