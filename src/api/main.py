@@ -1,6 +1,7 @@
 import asyncio
 import os
 
+import sentry_sdk
 import uvicorn
 from core import config
 from core.config import jwt_algorithms, jwt_secret_key
@@ -9,6 +10,7 @@ from db.redis import redis_connect, redis_disconnect
 from fastapi import FastAPI, Request
 from fastapi.responses import ORJSONResponse
 from jose import JWTError, jwt
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 import api
 
@@ -62,6 +64,10 @@ async def shutdown():
 app.include_router(api.router)
 
 if __name__ == '__main__':
+    sentry_sdk.init(
+        dsn='https://2a7a736e66894d99b97886c0448def48@o1212334.ingest.sentry.io/6350385',
+    )
+    app.add_middleware(SentryAsgiMiddleware)
     uvicorn.run(
         'main:app', host='0.0.0.0', port=8000,
     )

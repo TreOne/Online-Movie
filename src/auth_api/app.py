@@ -1,6 +1,10 @@
+import logging
 from http.client import TOO_MANY_REQUESTS
 
+import logstash
+import sentry_sdk
 from flask import Flask, jsonify, request
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 from auth_api import manage
 from auth_api.api.v1.views import blueprint as api_blueprint
@@ -10,12 +14,14 @@ from auth_api.commons.utils import is_rate_limit_exceeded
 from auth_api.extensions import apispec, db, jwt, migrate, settings, tracing
 from auth_api.oauth.v1.views import blueprint as oauth_blueprint
 from auth_api.settings.settings import Settings
+from auth_api.utils import RequestIdFilter
 
 
 def create_app():
     """Application factory, used to create application"""
     app = Flask('auth_api')
 
+    configure_sentry(settings)
     configure_app(app, settings)
     configure_extensions(app)
     configure_cli(app)
@@ -23,6 +29,24 @@ def create_app():
     register_blueprints(app)
 
     return app
+
+
+def configure_sentry(app_settings: Settings):
+    sentry_sdk.init(
+        dsn=app_settings.sentry_dsn,
+        integrations=[FlaskIntegration()],
+
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0,
+
+        # By default the SDK will try to use the SENTRY_RELEASE
+        # environment variable, or infer a git commit
+        # SHA as release, however you may want to set
+        # something more human-readable.
+        # release="myapp@1.0.0",
+    )
 
 
 def configure_app(app, app_settings: Settings):
@@ -39,6 +63,16 @@ def configure_app(app, app_settings: Settings):
 
     app.config['SQLALCHEMY_DATABASE_URI'] = app_settings.alchemy.database_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = app_settings.alchemy.track_modifications
+
+    logstash_handler = logstash.LogstashHandler(
+        host='logstash', port=5044, version=1,
+        tags=['auth_api'],
+    )
+
+    app.logger = logging.getLogger(__name__)
+    app.logger.setLevel(logging.INFO)
+    app.logger.addFilter(RequestIdFilter())
+    app.logger.addHandler(logstash_handler)
 
     app.before_request(before_request)
 

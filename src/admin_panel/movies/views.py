@@ -12,8 +12,8 @@ def index(request):
                 <li><a href="/api/openapi">Api service.</a></li>
                 <li><a href="/auth/swagger">Auth service.</a></li>
                 <li><a href="/ugc_service/openapi">UGC service.</a></li>
-                <li><a href="http://localhost:9000/">Kafdrop.</a></li>
                 <li><a href="http://localhost:16686/">Jaeger.</a></li>
+                <li><a href="http://localhost:5602/app/observability/overview">ELK logs.</a></li>
             </ul>
         </body>
     """

@@ -23,3 +23,6 @@ KAFKA_REQUEST_TIMEOUT_MS: int = int(os.getenv('KAFKA_REQUEST_TIMEOUT_MS', 5000))
 # JWT
 jwt_secret_key: str = os.getenv('JWT_SECRET_KEY', 'buz')
 jwt_algorithms: list[str] = ['HS256']
+
+# Sentry
+SENTRY_DSN: str = os.getenv('SENTRY_DSN')

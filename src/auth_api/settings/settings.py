@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, BaseSettings
@@ -54,6 +54,7 @@ class OAuthSettings(BaseModel):
 
 
 class Settings(BaseSettings):
+    sentry_dsn: str
     flask: FlaskSettings
     alchemy: AlchemySettings
     redis: RedisSettings
