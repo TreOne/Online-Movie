@@ -8,9 +8,9 @@ services:
       - media_volume:/home/app/admin_panel/media
       - ./log/nginx:/var/log/nginx
     logging:
-      driver: gelf
+      driver: gelf  # default driver for docker is "json-file"
       options:
-        gelf-address: udp://127.0.0.1:5044
+        gelf-address: udp://127.0.0.1:5045
         tag: nginx
     ports:
       - "80:80"
@@ -21,6 +21,7 @@ services:
       - ugc_service
     networks:
       - movie_network
+      - elk_logging
 
   admin_panel:
     build:
@@ -37,6 +38,7 @@ services:
       - 8000
     networks:
       - movie_network
+      - elk_logging
 
   db:
     image: postgres:12.0-alpine
@@ -77,6 +79,7 @@ services:
       - authredis
     networks:
       - movie_network
+      - elk_logging
 
   authdb:
     image: postgres:12.0-alpine
@@ -178,41 +181,6 @@ services:
     networks:
       - movie_network
 
-  kafka:
-    image: confluentinc/cp-kafka:6.2.0
-    expose:
-      - 9092
-    ports:
-      - "9093:9093"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-kafka:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,HOST://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,HOST://localhost:9093
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper-kafka
-    networks:
-      - movie_network
-
-  clickhouse:
-    image: clickhouse/clickhouse-server
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
-    expose:
-      - 8123
-    ports:
-      - "8123:8123"
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse/
-    networks:
-      - movie_network
-
   kf_to_ch:
     build:
       context: .
@@ -228,9 +196,11 @@ services:
 
   ### ELK логирование
   logstash:
-    image: docker.elastic.co/logstash/logstash:8.1.2
-    env_file:
-      - ./deploy/elk/logstash/example.env
+    image: logstash:8.1.2
+    environment:
+      XPACK_MONITORING_ENABLED: "true"  # Установите флаг 'false', если вы хотите запустить logstash без Elasticsearch, необходимо отключить встроенный мониторинг, отправляющий данные в ES
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      ELASTICSEARCH_HOST: "elasticsearch:9200"
     ports:
       - "5044:5044/udp"
     volumes:
@@ -242,7 +212,7 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - movie_network
+      - elk_logging
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.1.2
@@ -259,10 +229,10 @@ services:
     links:
       - logstash
     networks:
-      - movie_network
+      - elk_logging
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.1.2
+    image: elasticsearch:8.1.2
     environment:
       xpack.security.enabled: "false"
       bootstrap.memory_lock: "true"
@@ -271,23 +241,24 @@ services:
     expose:
       - 9200
     ports:
-      - "9200:9200"
+      - "19200:9200"
     volumes:
       # Обратите внимание: не стоит использовать для ELK тот же ES, который задействован для полнотекстового поиска в вашем сервисе
-      - elasticsearch_elk_data:/tmp/elasticsearch/data
+      - elastic_elk_data:/tmp/elasticsearch/data
     networks:
-      - movie_network
+      - elk_logging
 
   kibana_elk:
-    image: docker.elastic.co/kibana/kibana:8.1.2
-    env_file:
-      - ./deploy/elk/kibana/example.env
+    image: kibana:8.1.2
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
     ports:
       - "5602:5601"
     depends_on:
       - elasticsearch
     networks:
-      - movie_network
+      - elk_logging
 
   ### Опциональные сервисы
   kibana:
@@ -317,8 +288,8 @@ services:
 volumes:
   postgres_data:
   auth_postgres_data:
-  elasticsearch_data:
-  elasticsearch_elk_data:
+  elastic_data:
+  elastic_elk_data:
   zookeeper_data:
   clickhouse_data:
   static_volume:
@@ -326,4 +297,6 @@ volumes:
 
 networks:
   movie_network:
+    driver: bridge
+  elk_logging:
     driver: bridge
