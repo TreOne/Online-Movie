@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-import sentry_sdk
 import uvicorn
 from core import config
 from core.config import jwt_algorithms, jwt_secret_key
@@ -55,8 +54,7 @@ async def jwt_handler(request: Request, call_next):
 
 
 app.include_router(api.router)
+app.add_middleware(SentryAsgiMiddleware)
 
 if __name__ == '__main__':
-    sentry_sdk.init(dsn=config.SENTRY_DSN)
-    app.add_middleware(SentryAsgiMiddleware)
     uvicorn.run('main:app', host='0.0.0.0', port=8000)

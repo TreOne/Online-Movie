@@ -1,6 +1,8 @@
 import os
 from logging import config as logging_config
 
+import sentry_sdk
+
 from .logger import LOGGING
 
 # Применяем настройки логирования
@@ -26,3 +28,6 @@ jwt_algorithms: list[str] = ['HS256']
 
 # Sentry
 SENTRY_DSN: str = os.getenv('SENTRY_DSN')
+
+if SENTRY_DSN:
+    sentry_sdk.init(dsn=SENTRY_DSN)

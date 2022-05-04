@@ -1,11 +1,11 @@
 MONGO_PORT = 27017
-MONGO_HOST = "localhost"
-DB_NAME = "ugc_db"
+MONGO_HOST = 'localhost'
+DB_NAME = 'ugc_db'
 
-POSTGRES_DB = "ugc_postgres"
-POSTGRES_HOST = "localhost"
-POSTGRES_USER = "postgres"
-POSTGRES_PASSWORD = "postgres"
+POSTGRES_DB = 'ugc_postgres'
+POSTGRES_HOST = 'localhost'
+POSTGRES_USER = 'postgres'
+POSTGRES_PASSWORD = 'postgres'
 
 USERS_COUNT = 10000
 MOVIES_COUNT = 1000

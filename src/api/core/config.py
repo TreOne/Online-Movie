@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from logging import config as logging_config
 
+import sentry_sdk
 from core.logger import LOGGING
 
 # Применяем настройки логирования
@@ -47,3 +48,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # JWT
 jwt_secret_key = os.getenv('SECRET_KEY', 'buz')
 jwt_algorithms = ['HS256']
+
+# Sentry configuration
+SENTRY_DSN: str = os.getenv('SENTRY_DSN', '')
+
+
+if SENTRY_DSN:
+    sentry_sdk.init(dsn=SENTRY_DSN)

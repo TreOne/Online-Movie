@@ -1,38 +1,56 @@
 import random
 
 from pymongo import DESCENDING
-from research_mongo.generate_data import (
-    get_random_field,
-    benchmark,
-    get_uuid,
-    generate_movie_scores,
-    get_random_date,
-    generate_review_scores,
-)
-
 from research_mongo.config import BENCHMARK_ITERATIONS
+from research_mongo.generate_data import (
+    benchmark,
+    generate_movie_scores,
+    generate_review_scores,
+    get_random_date,
+    get_random_field,
+    get_uuid,
+)
 from research_mongo.init_db import PostgresDB
-from research_mongo.models import UserBookmarks, MovieScores, Movies, ReviewScores, Reviews
-from sqlalchemy.sql import func
+from research_mongo.models import (
+    Movies,
+    MovieScores,
+    Reviews,
+    ReviewScores,
+    UserBookmarks,
+)
 from sqlalchemy import desc
+from sqlalchemy.sql import func
+
 postgres_db = PostgresDB().postgres_db()
 
-USER_ID = [str(uuid.user_id) for uuid in postgres_db.query(UserBookmarks.user_id).order_by(func.random()).limit(
-    100).all()]
-MOVIE_ID = [str(uuid._id) for uuid in postgres_db.query(Movies._id).order_by(func.random()).limit(
-    100).all()]
-REVIEW_ID = [str(uuid._id) for uuid in postgres_db.query(Reviews._id).order_by(func.random()).limit(
-    100).all()]
+USER_ID = [
+    str(uuid.user_id) for uuid in postgres_db.query(UserBookmarks.user_id).order_by(func.random()).limit(
+        100,
+    ).all()
+]
+MOVIE_ID = [
+    str(uuid._id) for uuid in postgres_db.query(Movies._id).order_by(func.random()).limit(
+        100,
+    ).all()
+]
+REVIEW_ID = [
+    str(uuid._id) for uuid in postgres_db.query(Reviews._id).order_by(func.random()).limit(
+        100,
+    ).all()
+]
 
 
 def check_count_in_tables():
-    print("Пользователей с закладками фильмов - ", postgres_db.query(UserBookmarks).distinct(
-        UserBookmarks.user_id).count())
-    print("Закладок фильмов - ", postgres_db.query(UserBookmarks).count())
-    print("Оценок фильмов - ", postgres_db.query(MovieScores).distinct(MovieScores._id).count())
-    print("Фильмов - ", postgres_db.query(Movies).distinct(Movies._id).count())
-    print("Рецензий - ", postgres_db.query(Reviews).distinct(Reviews._id).count())
-    print("Оценок рецензий - ", postgres_db.query(ReviewScores).distinct(ReviewScores._id).count())
+    print(
+        'Пользователей с закладками фильмов - ', postgres_db.query(UserBookmarks).distinct(
+            UserBookmarks.user_id,
+        ).count(),
+    )
+    print('Закладок фильмов - ', postgres_db.query(UserBookmarks).count())
+    print('Оценок фильмов - ', postgres_db.query(MovieScores).distinct(MovieScores._id).count())
+    print('Фильмов - ', postgres_db.query(Movies).distinct(Movies._id).count())
+    print('Рецензий - ', postgres_db.query(Reviews).distinct(Reviews._id).count())
+    print('Оценок рецензий - ', postgres_db.query(ReviewScores).distinct(ReviewScores._id).count())
 
 
 @benchmark(BENCHMARK_ITERATIONS)
@@ -82,7 +100,8 @@ def test_get_popular_movies():
 def test_get_popular_reviews_for_movie():
     movie_id = random.choice(MOVIE_ID)
     reviews = postgres_db.query(Reviews).filter(Reviews.movie_id == movie_id).order_by(desc(Reviews.rating)).limit(
-        100).all()
+        100,
+    ).all()
     review_ids = [review.__dict__ for review in reviews]
     return review_ids
 
@@ -92,7 +111,8 @@ def test_get_popular_reviews_for_movie():
 def test_get_movies_with_new_reviews():
     movie_id = random.choice(MOVIE_ID)
     reviews = postgres_db.query(Reviews).filter(Reviews.movie_id == movie_id).order_by(desc(Reviews.pub_date)).limit(
-        100).all()
+        100,
+    ).all()
     review_ids = [review.__dict__ for review in reviews]
     return review_ids
 
@@ -113,7 +133,7 @@ def test_add_bookmark_to_user():
     user = UserBookmarks(user_id=user_id, bookmarks=movie_id)
     postgres_db.add(user)
     postgres_db.query(UserBookmarks.bookmarks).filter(UserBookmarks.bookmarks == movie_id).first()
-    print(f"В закладки добавлен фильм - {movie_id} для пользователя - {user_id}")
+    print(f'В закладки добавлен фильм - {movie_id} для пользователя - {user_id}')
     return movie_id
 
 
@@ -130,10 +150,13 @@ def test_add_score_to_movie():
     scores_amount = movie.scores_amount
     new_rating = (scores_amount + new_score) / (scores_quantity + 1)
 
-    postgres_db.query(Movies).filter(Movies._id == movie_id).update({Movies.scores_quantity: (
-        scores_quantity + 1), Movies.rating: int(new_rating)})
+    postgres_db.query(Movies).filter(Movies._id == movie_id).update({
+        Movies.scores_quantity: (
+            scores_quantity + 1
+        ), Movies.rating: int(new_rating),
+    })
 
-    print(f"Фильму - {movie_id} поставлена новая оценка от пользователя - {user_id}")
+    print(f'Фильму - {movie_id} поставлена новая оценка от пользователя - {user_id}')
     return movie
 
 
@@ -151,7 +174,7 @@ def test_add_review_to_movie():
         movie_id=movie_id,
         user_id=user_id,
         pub_date=get_random_date(),
-        text="Test duration add review to movie",
+        text='Test duration add review to movie',
         movies_score_id=score._id,
         rating=0,
         scores_quantity=0,
@@ -165,12 +188,15 @@ def test_add_review_to_movie():
     scores_amount = movie.scores_amount
     new_rating = (scores_amount + new_score) / (scores_quantity + 1)
 
-    postgres_db.query(Movies).filter(Movies._id == movie_id).update({Movies.scores_quantity: (
-            scores_quantity + 1), Movies.rating: int(new_rating)})
+    postgres_db.query(Movies).filter(Movies._id == movie_id).update({
+        Movies.scores_quantity: (
+            scores_quantity + 1
+        ), Movies.rating: int(new_rating),
+    })
 
     print(
-        f"Фильму - {movie_id} поставлена новая оценка от пользователя - {user_id}, и добавлена"
-        f"рецензия {review_id}"
+        f'Фильму - {movie_id} поставлена новая оценка от пользователя - {user_id}, и добавлена'
+        f'рецензия {review_id}',
     )
     return movie
 
@@ -189,9 +215,12 @@ def test_add_score_to_review():
     scores_amount = review.scores_amount
     new_rating = (scores_amount + new_score) / (scores_quantity + 1)
 
-    postgres_db.query(Reviews).filter(Reviews._id == review_id).update({Reviews.scores_quantity: (
-            scores_quantity + 1), Reviews.rating: int(new_rating)})
-    print(f"Рецензии - {review_id} поставлена новая оценка от пользователя - {user_id}")
+    postgres_db.query(Reviews).filter(Reviews._id == review_id).update({
+        Reviews.scores_quantity: (
+            scores_quantity + 1
+        ), Reviews.rating: int(new_rating),
+    })
+    print(f'Рецензии - {review_id} поставлена новая оценка от пользователя - {user_id}')
     return review
 
 
