@@ -7,11 +7,12 @@ from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from auth_api import manage
+from auth_api.api.rpc.users import users as rpc_users
 from auth_api.api.v1.views import blueprint as api_blueprint
 from auth_api.auth.v1.views import blueprint as auth_blueprint
 from auth_api.commons.fast_json import ORJSONDecoder, ORJSONEncoder
 from auth_api.commons.utils import is_rate_limit_exceeded
-from auth_api.extensions import apispec, db, jwt, migrate, settings, tracing
+from auth_api.extensions import apispec, db, jsonrpc, jwt, migrate, settings, tracing
 from auth_api.oauth.v1.views import blueprint as oauth_blueprint
 from auth_api.settings.settings import Settings
 from auth_api.utils import RequestIdFilter
@@ -94,6 +95,11 @@ def configure_extensions(app):
     jwt.init_app(app)
     migrate.init_app(app, db)
     tracing.init_app(app)
+
+    jsonrpc.init_app(app)
+    jsonrpc.register_blueprint(
+        app, rpc_users, url_prefix='/users', enable_web_browsable_api=True,
+    )
 
 
 def configure_cli(app):

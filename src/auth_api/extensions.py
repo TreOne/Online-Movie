@@ -1,4 +1,5 @@
 import redis
+from flask_jsonrpc import JSONRPC
 from flask_jwt_extended import JWTManager
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
@@ -26,6 +27,7 @@ ma = Marshmallow()
 migrate = Migrate()
 apispec = APISpecExt()
 pwd_context = CryptContext(schemes=['pbkdf2_sha256'])
+jsonrpc = JSONRPC(service_url='/api', enable_web_browsable_api=True)
 
 
 def setup_jaeger():

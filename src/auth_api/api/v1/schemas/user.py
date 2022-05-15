@@ -37,3 +37,29 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
             'roles',
             'is_totp_enabled',
         )
+
+
+class RpcUserSchema(ma.SQLAlchemyAutoSchema):
+    uuid = auto_field(example='768b49ca-02d9-4524-9f13-3ac70f0cd7eb')
+    username = auto_field(required=True, example='CoolUser')
+    email = ma.Email(required=True, validate=Length(max=80))
+    roles = ma.Nested(RoleSchema, many=True)
+
+    class Meta:
+        model = User
+        sqla_session = db.session
+        load_instance = True
+        fields = (
+            'uuid',
+            'username',
+            'email',
+            'is_active',
+            'is_superuser',
+            'roles',
+        )
+        dump_only = (
+            'uuid',
+            'is_active',
+            'is_superuser',
+            'roles',
+        )
