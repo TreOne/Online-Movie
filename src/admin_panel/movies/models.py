@@ -45,7 +45,7 @@ class Genre(TimeStampedModel):
 
 class Person(TimeStampedModel):
     """
-    Персона (актёр/режисёр/сценарист).
+    Персона (актёр/режисёр/сценарист)
     """
 
     id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
